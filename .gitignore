@@ -1,0 +1,22 @@
+# Vercel
+.vercel
+
+# Node modules (caso adicione dependências no futuro)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+

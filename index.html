@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluency Master - Aprenda Inglês</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: #000;
+            overflow-x: hidden;
+        }
+        body.dark-mode {
+            background: #000;
+        }
+        .main-gradient {
+            background: transparent;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Estrelas animadas */
+        .main-gradient::before {
+            content: '';
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: white;
+            top: 20%;
+            right: 15%;
+            box-shadow: 
+                100px 200px 0 white,
+                -150px 80px 0 white,
+                200px -100px 0 white,
+                -300px 150px 0 white,
+                400px 50px 0 white,
+                -200px -50px 0 white,
+                150px 300px 0 white,
+                -100px 200px 0 white,
+                300px 150px 0 rgba(255,255,255,0.8),
+                -250px 250px 0 rgba(255,255,255,0.8),
+                500px 100px 0 rgba(255,255,255,0.6),
+                -400px -100px 0 rgba(255,255,255,0.6);
+            animation: twinkle 3s infinite;
+            z-index: 1;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        .card {
+            background: linear-gradient(135deg, rgba(15, 12, 41, 0.9) 0%, rgba(48, 43, 99, 0.85) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3), 0 0 20px rgba(75, 0, 130, 0.2);
+        }
+        body.dark-mode .card {
+            background: linear-gradient(135deg, rgba(10, 10, 30, 0.95) 0%, rgba(30, 20, 60, 0.9) 100%);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            color: #e0e0ff;
+        }
+        .btn-glowing {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+        }
+        .btn-glowing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.6), 0 0 25px rgba(138, 43, 226, 0.5);
+            border-color: rgba(138, 43, 226, 0.8);
+        }
+        .btn-glowing:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+        }
+        .btn-glowing:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .mic-recording {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .word-chip {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .word-chip:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .daily-challenge-btn {
+            animation: cosmic-glow 2s infinite alternate;
+            background: linear-gradient(135deg, #FF6B00 0%, #FFD700 50%, #FF6B00 100%) !important;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+        }
+        @keyframes cosmic-glow {
+            from { 
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 140, 0, 0.4);
+                filter: brightness(1);
+            }
+            to { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 50px rgba(255, 140, 0, 0.6);
+                filter: brightness(1.2);
+            }
+        }
+        .badge-item {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.8) 0%, rgba(138, 43, 226, 0.8) 100%);
+            border: 2px solid rgba(186, 85, 211, 0.5);
+        }
+        .badge-item:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.8);
+        }
+        .badge-locked {
+            filter: grayscale(100%) brightness(0.5);
+            opacity: 0.3;
+        }
+        .streak-flame {
+            animation: flame-flicker 2s infinite;
+            filter: drop-shadow(0 0 10px #FF6B00);
+        }
+        @keyframes flame-flicker {
+            0%, 100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 10px #FF6B00); }
+            50% { opacity: 0.9; transform: scale(1.15); filter: drop-shadow(0 0 20px #FFD700); }
+        }
+        .level-badge {
+            background: linear-gradient(135deg, #4B0082 0%, #8A2BE2 50%, #9370DB 100%);
+            animation: cosmic-shine 3s infinite;
+            border: 2px solid rgba(186, 85, 211, 0.6);
+        }
+        @keyframes cosmic-shine {
+            0%, 100% { box-shadow: 0 0 15px rgba(138, 43, 226, 0.6), inset 0 0 15px rgba(186, 85, 211, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(138, 43, 226, 0.9), inset 0 0 20px rgba(186, 85, 211, 0.5); }
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .vocab-card {
+            perspective: 1000px;
+        }
+        .vocab-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .vocab-card.flipped .vocab-card-inner {
+            transform: rotateY(180deg);
+        }
+        .vocab-card-front, .vocab-card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .vocab-card-back {
+            transform: rotateY(180deg);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.4) 0%, rgba(25, 25, 112, 0.4) 100%);
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+        body.dark-mode .stat-card {
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.6) 0%, rgba(25, 25, 112, 0.6) 100%);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+        }
+        .theme-toggle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        .achievement-popup {
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Efeitos de Nebulosa para botões principais */
+        .nebula-blue {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%) !important;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), inset 0 0 20px rgba(30, 58, 138, 0.3);
+        }
+        .nebula-purple {
+            background: linear-gradient(135deg, #581c87 0%, #9333ea 50%, #c084fc 100%) !important;
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.6), inset 0 0 20px rgba(88, 28, 135, 0.3);
+        }
+        .nebula-green {
+            background: linear-gradient(135deg, #065f46 0%, #10b981 50%, #34d399 100%) !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6), inset 0 0 20px rgba(6, 95, 70, 0.3);
+        }
+        .nebula-pink {
+            background: linear-gradient(135deg, #831843 0%, #ec4899 50%, #f472b6 100%) !important;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.6), inset 0 0 20px rgba(131, 24, 67, 0.3);
+        }
+        
+        /* Texto com brilho espacial */
+        .space-text {
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8), 0 0 20px rgba(138, 43, 226, 0.4);
+        }
+        
+        /* Palavra chip com tema espacial */
+        .word-chip {
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.6) 0%, rgba(138, 43, 226, 0.6) 100%);
+            border: 1px solid rgba(186, 85, 211, 0.5);
+            color: #fff;
+        }
+        .word-chip:hover {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8) 0%, rgba(186, 85, 211, 0.8) 100%);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.8);
+        }
+    </style>
+</head>
+<body class="main-gradient text-gray-800">
+    <!-- Video de Fundo do Universo -->
+    <video autoplay muted loop id="universe-video" class="fixed top-0 left-0 w-full h-full object-cover z-0">
+        <source src="public/videoUniverso.mp4" type="video/mp4">
+    </video>
+    
+    <!-- Overlay escuro para melhor legibilidade -->
+    <div class="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-0"></div>
+    
+    <div id="app" class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+
+        <!-- Tela Principal / Menu -->
+        <div id="home-screen" class="w-full max-w-6xl fade-in relative z-10">
+            <!-- Header com Theme Toggle -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleTheme()" class="theme-toggle text-white text-2xl p-3 hover:bg-white/10 rounded-full">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="text-center mb-8">
+                <h1 class="text-6xl font-extrabold text-white mb-2 space-text">Fluency Master</h1>
+                <p class="text-xl text-white opacity-90">🌌 Explore o universo do inglês 🚀</p>
+                
+                <!-- Stats Row -->
+                <div class="grid grid-cols-3 gap-4 mt-6 max-w-2xl mx-auto">
+                    <div class="stat-card p-4 rounded-xl text-white">
+                        <div class="text-3xl font-bold text-yellow-300"><i class="fas fa-star"></i></div>
+                        <div class="text-2xl font-bold" id="user-score">0</div>
+                        <div class="text-sm opacity-90">Pontos</div>
+                    </div>
+                    <div class="stat-card p-4 rounded-xl text-white">
+                        <div class="text-3xl font-bold text-orange-400 streak-flame"><i class="fas fa-fire"></i></div>
+                        <div class="text-2xl font-bold" id="user-streak">0</div>
+                        <div class="text-sm opacity-90">Dias Seguidos</div>
+                    </div>
+                    <div class="stat-card p-4 rounded-xl text-white">
+                        <div class="level-badge inline-block px-4 py-1 rounded-full text-sm font-bold">
+                            <span id="user-level">Iniciante</span>
+                        </div>
+                        <div class="text-sm mt-2 opacity-90">Nível</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botão do Desafio do Dia -->
+            <div class="mb-6">
+                 <button onclick="showScreen('daily-challenge-screen')" class="w-full btn-glowing daily-challenge-btn flex items-center justify-center text-xl font-bold bg-yellow-400 text-yellow-900 p-5 rounded-2xl shadow-2xl transition">
+                    <i class="fas fa-calendar-day mr-3 text-2xl"></i> 
+                    <span>Desafio do Dia</span>
+                    <i class="fas fa-trophy ml-3 text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Grid Principal de Atividades -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <button onclick="showScreen('speaking-screen')" class="btn-glowing nebula-blue flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition">
+                    <div class="category-icon">🎤</div>
+                    <span>Fala</span>
+                </button>
+                <button onclick="showScreen('listening-screen')" class="btn-glowing nebula-purple flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition">
+                    <div class="category-icon">🎧</div>
+                    <span>Audição</span>
+                </button>
+                <button onclick="showScreen('writing-screen')" class="btn-glowing nebula-green flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition">
+                    <div class="category-icon">✍️</div>
+                    <span>Escrita</span>
+                </button>
+                <button onclick="showScreen('vocabulary-screen')" class="btn-glowing nebula-pink flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition">
+                    <div class="category-icon">📚</div>
+                    <span>Vocabulário</span>
+                </button>
+            </div>
+            
+            <!-- Botões Secundários -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="showScreen('idioms-screen')" class="btn-glowing flex items-center justify-center text-base font-semibold text-white p-4 rounded-xl shadow-lg transition" style="background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.8) 100%);">
+                    <i class="fas fa-book-open mr-2"></i> 💬 Expressões
+                </button>
+                <button onclick="showScreen('achievements-screen')" class="btn-glowing flex items-center justify-center text-base font-semibold text-white p-4 rounded-xl shadow-lg transition" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.8) 0%, rgba(245, 158, 11, 0.8) 100%);">
+                    <i class="fas fa-trophy mr-2"></i> 🏆 Conquistas
+                </button>
+                <button onclick="showScreen('progress-screen')" class="btn-glowing flex items-center justify-center text-base font-semibold text-white p-4 rounded-xl shadow-lg transition" style="background: linear-gradient(135deg, rgba(91, 33, 182, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);">
+                    <i class="fas fa-chart-line mr-2"></i> 📊 Progresso
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tela de Desafio do Dia -->
+        <div id="daily-challenge-screen" class="w-full max-w-2xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">🌟 Desafio do Dia 🌟</h2>
+            <div class="card p-6 rounded-2xl shadow-2xl">
+                <div id="challenge-content">
+                    <!-- Conteúdo do desafio será inserido aqui -->
+                </div>
+                <div id="challenge-completed" class="hidden text-center">
+                    <i class="fas fa-check-circle text-5xl text-green-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-purple-300">Parabéns!</h3>
+                    <p class="text-gray-200">Você já completou o desafio de hoje. Volte amanhã para um novo!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Expressões Idiomáticas -->
+        <div id="idioms-screen" class="w-full max-w-3xl hidden relative z-10">
+             <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">💬 Expressões Idiomáticas 💬</h2>
+            <div id="idioms-list" class="w-full h-[70vh] overflow-y-auto space-y-4 pr-2">
+                <!-- Lista de expressões será inserida aqui -->
+            </div>
+        </div>
+
+        <!-- Tela de Prática de Fala -->
+        <div id="speaking-screen" class="w-full max-w-2xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">🎤 Prática de Fala 🎤</h2>
+            <div class="card p-6 rounded-2xl shadow-2xl">
+                <div id="level-selection-speaking" class="flex justify-center gap-4 mb-6">
+                    <button onclick="startSpeakingPractice('basic')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition">Básico</button>
+                    <button onclick="startSpeakingPractice('intermediate')" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition">Intermediário</button>
+                    <button onclick="startSpeakingPractice('advanced')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition">Avançado</button>
+                </div>
+                 <div id="practice-area-speaking" class="hidden text-center">
+                     <div class="mb-4">
+                         <p class="text-lg text-purple-200 mb-1">Frase:</p>
+                         <p id="phrase-en" class="text-2xl md:text-3xl font-bold text-purple-200"></p>
+                         <p id="phrase-pt" class="text-md text-gray-300 mt-1"></p>
+                     </div>
+                    <div id="feedback" class="h-8 mb-4 text-lg font-semibold"></div>
+                    <div class="flex items-center justify-center gap-4">
+                        <button id="listen-btn" onclick="listenToPhrase()" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition transform hover:scale-110">
+                            <i class="fas fa-volume-up text-2xl"></i>
+                        </button>
+                        <button id="speak-btn" onclick="recordAndCheck()" class="bg-red-500 hover:bg-red-600 text-white p-6 rounded-full shadow-lg transition transform hover:scale-110">
+                            <i class="fas fa-microphone-alt text-3xl"></i>
+                        </button>
+                    </div>
+                      <p id="user-speech" class="mt-4 text-gray-200 h-6"></p>
+                    <button id="next-phrase-btn" onclick="nextPhrase()" class="hidden mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">Próxima Frase</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Prática de Audição -->
+        <div id="listening-screen" class="w-full max-w-2xl hidden relative z-10">
+             <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">🎧 Prática de Audição 🎧</h2>
+            <div class="card p-6 rounded-2xl shadow-2xl text-center">
+                 <p class="mb-4 text-gray-200 font-semibold">Ouça a frase e digite o que você ouviu.</p>
+                 <button id="listen-exercise-btn" onclick="listenToExercisePhrase()" class="bg-blue-500 hover:bg-blue-600 text-white p-5 rounded-full shadow-lg transition transform hover:scale-110 mb-4">
+                    <i class="fas fa-volume-up text-3xl"></i>
+                </button>
+                 <input type="text" id="listening-input" class="w-full p-3 border-2 border-purple-400 bg-gray-800 text-white rounded-lg text-lg text-center focus:outline-none focus:border-purple-300" placeholder="Digite aqui...">
+                <div id="listening-feedback" class="h-6 mt-4 font-semibold"></div>
+                <button onclick="checkListeningAnswer()" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition">Verificar</button>
+                <button id="next-listening-btn" onclick="nextListeningExercise()" class="hidden mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">Próximo</button>
+            </div>
+        </div>
+
+        <!-- Tela de Prática de Escrita -->
+        <div id="writing-screen" class="w-full max-w-2xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">✍️ Prática de Escrita ✍️</h2>
+            <div class="card p-6 rounded-2xl shadow-2xl">
+                <div id="grammar-topic">
+                    <h3 id="topic-title" class="text-2xl font-bold text-purple-300 mb-2"></h3>
+                    <p id="topic-explanation" class="text-gray-200 mb-4"></p>
+                </div>
+                <div id="exercise-area" class="min-h-[150px]">
+                    <!-- O conteúdo do exercício será injetado aqui pelo JS -->
+                </div>
+                <div id="writing-feedback" class="h-6 mt-4 font-semibold"></div>
+                <button onclick="checkWritingAnswer()" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition">Verificar</button>
+                <button id="next-exercise-btn" onclick="nextExercise()" class="hidden mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">Próximo</button>
+            </div>
+        </div>
+
+        <!-- Tela de Progresso -->
+        <div id="progress-screen" class="w-full max-w-4xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-8 space-text">📊 Meu Progresso 📊</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card de Pontuação -->
+                <div class="card p-6 rounded-2xl shadow-2xl text-center">
+                    <h3 class="text-xl font-bold text-purple-300 mb-3">Pontuação Total</h3>
+                    <p id="progress-score" class="text-5xl font-extrabold text-yellow-400 mb-2">
+                        <i class="fas fa-star"></i> 0
+                    </p>
+                    <div class="mt-4 text-sm text-gray-200">
+                        <p>Continue praticando para ganhar mais pontos!</p>
+                    </div>
+                </div>
+                
+                <!-- Card de Streak -->
+                <div class="card p-6 rounded-2xl shadow-2xl text-center">
+                    <h3 class="text-xl font-bold text-purple-300 mb-3">Dias Consecutivos</h3>
+                    <p class="text-5xl font-extrabold text-orange-400 mb-2">
+                        <i class="fas fa-fire streak-flame"></i> <span id="progress-streak">0</span>
+                    </p>
+                    <div class="mt-4 text-sm text-gray-200">
+                        <p>Pratique todos os dias para manter sua sequência!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progresso de Fala -->
+            <div class="card p-6 rounded-2xl shadow-2xl mt-6">
+                <h3 class="text-2xl font-bold text-purple-200 mb-6 text-center">Frases Completas (Fala)</h3>
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold text-green-300 flex items-center">
+                                <i class="fas fa-seedling mr-2"></i> Básico
+                            </span>
+                            <span id="basic-progress-label" class="font-bold text-gray-200">0/0</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-5 overflow-hidden">
+                            <div id="basic-progress-bar" class="bg-gradient-to-r from-green-400 to-green-600 h-5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold text-yellow-300 flex items-center">
+                                <i class="fas fa-graduation-cap mr-2"></i> Intermediário
+                            </span>
+                            <span id="intermediate-progress-label" class="font-bold text-gray-200">0/0</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-5 overflow-hidden">
+                            <div id="intermediate-progress-bar" class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold text-red-300 flex items-center">
+                                <i class="fas fa-crown mr-2"></i> Avançado
+                            </span>
+                            <span id="advanced-progress-label" class="font-bold text-gray-200">0/0</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-5 overflow-hidden">
+                            <div id="advanced-progress-bar" class="bg-gradient-to-r from-red-400 to-red-600 h-5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Outros Exercícios -->
+             <div class="card p-6 rounded-2xl shadow-2xl mt-6 text-center">
+                 <h3 class="text-2xl font-bold text-purple-200 mb-4">Exercícios Completos</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-4 rounded-xl">
+                        <i class="fas fa-headphones text-3xl text-purple-600 mb-2"></i>
+                        <p class="text-sm font-semibold">Audição & Escrita</p>
+                        <p class="text-2xl font-bold text-purple-700" id="exercises-progress-label">0</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-pink-100 to-pink-200 p-4 rounded-xl">
+                        <i class="fas fa-book text-3xl text-pink-600 mb-2"></i>
+                        <p class="text-sm font-semibold">Vocabulário</p>
+                        <p class="text-2xl font-bold text-pink-700" id="vocab-progress-label">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                 <button onclick="handleResetProgress()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105">
+                    <i class="fas fa-redo mr-2"></i> Resetar Progresso
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tela de Vocabulário -->
+        <div id="vocabulary-screen" class="w-full max-w-5xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-8 space-text">📚 Vocabulário Cósmico 📚</h2>
+            
+            <!-- Seletor de Categoria -->
+            <div class="flex flex-wrap justify-center gap-3 mb-6">
+                <button onclick="loadVocabulary('all')" class="vocab-category-btn active bg-white text-indigo-700 font-bold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition" data-category="all">
+                    <i class="fas fa-globe mr-2"></i> Todos
+                </button>
+                <button onclick="loadVocabulary('travel')" class="vocab-category-btn bg-white/80 text-indigo-700 font-semibold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition" data-category="travel">
+                    <i class="fas fa-plane mr-2"></i> Viagens
+                </button>
+                <button onclick="loadVocabulary('food')" class="vocab-category-btn bg-white/80 text-indigo-700 font-semibold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition" data-category="food">
+                    <i class="fas fa-utensils mr-2"></i> Comida
+                </button>
+                <button onclick="loadVocabulary('business')" class="vocab-category-btn bg-white/80 text-indigo-700 font-semibold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition" data-category="business">
+                    <i class="fas fa-briefcase mr-2"></i> Negócios
+                </button>
+                <button onclick="loadVocabulary('emotions')" class="vocab-category-btn bg-white/80 text-indigo-700 font-semibold py-2 px-6 rounded-full shadow-lg hover:scale-105 transition" data-category="emotions">
+                    <i class="fas fa-heart mr-2"></i> Emoções
+                </button>
+            </div>
+            
+            <div id="vocabulary-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-[65vh] overflow-y-auto pr-2">
+                <!-- Cards de vocabulário serão inseridos aqui -->
+            </div>
+        </div>
+        
+        <!-- Tela de Conquistas -->
+        <div id="achievements-screen" class="w-full max-w-5xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-8 space-text">🏆 Conquistas Estelares 🏆</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="achievements-list">
+                <!-- Badges serão inseridos aqui -->
+            </div>
+        </div>
+        
+        <!-- Modal Customizado -->
+        <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50 p-4">
+            <div class="card p-6 rounded-2xl shadow-xl text-center max-w-sm w-full">
+                <p id="modal-message" class="mb-5 text-lg"></p>
+                <div id="modal-buttons"></div>
+            </div>
+        </div>
+        
+        <!-- Achievement Popup -->
+        <div id="achievement-popup" class="fixed bottom-4 right-4 hidden z-50 achievement-popup">
+            <div class="p-4 rounded-xl shadow-2xl text-white max-w-xs" style="background: linear-gradient(135deg, #4B0082 0%, #8A2BE2 50%, #FFD700 100%); border: 2px solid rgba(255, 215, 0, 0.6); box-shadow: 0 0 30px rgba(138, 43, 226, 0.8);">
+                <div class="flex items-center gap-3">
+                    <div class="text-4xl" id="achievement-icon">🏆</div>
+                    <div class="text-left">
+                        <p class="font-bold text-lg">⭐ Nova Conquista!</p>
+                        <p class="text-sm" id="achievement-text">Parabéns!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Audio Elements for Feedback -->
+    <audio id="success-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRhwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQA=" type="audio/wav">
+    </audio>
+
+    <script>
+        // --- BANCO DE DADOS ---
+        const phrases = {
+            basic: [ 
+                { en: "Hello, how are you?", pt: "Olá, como você está?" }, 
+                { en: "My name is John.", pt: "Meu nome é John." }, 
+                { en: "What is your name?", pt: "Qual é o seu nome?" }, 
+                { en: "I am from Brazil.", pt: "Eu sou do Brasil." }, 
+                { en: "Good morning.", pt: "Bom dia." }, 
+                { en: "Pleased to meet you.", pt: "Prazer em conhecê-lo." }, 
+                { en: "Thank you very much.", pt: "Muito obrigado." }, 
+                { en: "Excuse me, where is the bathroom?", pt: "Com licença, onde fica o banheiro?" }, 
+                { en: "I don't understand.", pt: "Eu não entendo." }, 
+                { en: "Can you help me?", pt: "Você pode me ajudar?" },
+                { en: "How much does this cost?", pt: "Quanto custa isso?" },
+                { en: "I would like a coffee, please.", pt: "Eu gostaria de um café, por favor." }
+            ],
+            intermediate: [ 
+                { en: "I have been studying English for two years.", pt: "Eu estudo inglês há dois anos." }, 
+                { en: "Could you please speak more slowly?", pt: "Você poderia falar mais devagar, por favor?" }, 
+                { en: "I'm looking forward to visiting New York.", pt: "Estou ansioso para visitar Nova York." }, 
+                { en: "What do you do for a living?", pt: "O que você faz da vida?" }, 
+                { en: "This is more difficult than I thought.", pt: "Isso é mais difícil do que eu pensava." }, 
+                { en: "If I were you, I would take that job offer.", pt: "Se eu fosse você, aceitaria essa oferta de emprego." }, 
+                { en: "She is interested in learning about other cultures.", pt: "Ela está interessada em aprender sobre outras culturas." }, 
+                { en: "How long does it take to get to the airport?", pt: "Quanto tempo leva para chegar ao aeroporto?" },
+                { en: "I'm supposed to meet him at the coffee shop.", pt: "Devo encontrá-lo na cafeteria." },
+                { en: "We should have left earlier to avoid traffic.", pt: "Deveríamos ter saído mais cedo para evitar o trânsito." }
+            ],
+            advanced: [ 
+                { en: "The nuances of the language are quite fascinating.", pt: "As nuances da língua são bastante fascinantes." }, 
+                { en: "Despite the inclement weather, we decided to proceed.", pt: "Apesar do tempo inclemente, decidimos prosseguir." }, 
+                { en: "He has a plethora of knowledge on the subject.", pt: "Ele tem uma infinidade de conhecimento sobre o assunto." }, 
+                { en: "It's a quintessential example of modern architecture.", pt: "É um exemplo quintessencial da arquitetura moderna." }, 
+                { en: "The politician's speech was rather disingenuous.", pt: "O discurso do político foi bastante dissimulado." }, 
+                { en: "Comprehending the intricacies of quantum physics is a formidable task.", pt: "Compreender as complexidades da física quântica é uma tarefa formidável." }, 
+                { en: "The ubiquitous nature of social media has changed society.", pt: "A natureza onipresente das mídias sociais mudou a sociedade." },
+                { en: "The dichotomy between theory and practice is evident.", pt: "A dicotomia entre teoria e prática é evidente." }
+            ]
+        };
+        
+        const vocabulary = {
+            travel: [
+                { word: "Airport", translation: "Aeroporto", example: "The airport is very busy today.", phonetic: "/ˈeə.pɔːt/" },
+                { word: "Passport", translation: "Passaporte", example: "Don't forget your passport!", phonetic: "/ˈpæs.pɔːt/" },
+                { word: "Luggage", translation: "Bagagem", example: "Where is my luggage?", phonetic: "/ˈlʌɡ.ɪdʒ/" },
+                { word: "Hotel", translation: "Hotel", example: "I booked a hotel near the beach.", phonetic: "/hoʊˈtel/" },
+                { word: "Tourist", translation: "Turista", example: "The city is full of tourists.", phonetic: "/ˈtʊr.ɪst/" },
+                { word: "Flight", translation: "Voo", example: "My flight was delayed.", phonetic: "/flaɪt/" }
+            ],
+            food: [
+                { word: "Breakfast", translation: "Café da manhã", example: "I have cereal for breakfast.", phonetic: "/ˈbrek.fəst/" },
+                { word: "Delicious", translation: "Delicioso", example: "This cake is delicious!", phonetic: "/dɪˈlɪʃ.əs/" },
+                { word: "Restaurant", translation: "Restaurante", example: "Let's go to a restaurant.", phonetic: "/ˈres.tə.rɑːnt/" },
+                { word: "Menu", translation: "Cardápio", example: "Can I see the menu, please?", phonetic: "/ˈmen.juː/" },
+                { word: "Vegetarian", translation: "Vegetariano", example: "Do you have vegetarian options?", phonetic: "/ˌvedʒ.əˈter.i.ən/" },
+                { word: "Recipe", translation: "Receita", example: "I love this recipe!", phonetic: "/ˈres.ə.pi/" }
+            ],
+            business: [
+                { word: "Meeting", translation: "Reunião", example: "We have a meeting at 3 PM.", phonetic: "/ˈmiː.tɪŋ/" },
+                { word: "Deadline", translation: "Prazo final", example: "The deadline is tomorrow.", phonetic: "/ˈded.laɪn/" },
+                { word: "Contract", translation: "Contrato", example: "Please sign the contract.", phonetic: "/ˈkɑːn.trækt/" },
+                { word: "Salary", translation: "Salário", example: "What's your expected salary?", phonetic: "/ˈsæl.ə.ri/" },
+                { word: "Manager", translation: "Gerente", example: "I need to speak with my manager.", phonetic: "/ˈmæn.ɪ.dʒər/" },
+                { word: "Presentation", translation: "Apresentação", example: "The presentation was excellent.", phonetic: "/ˌprez.ənˈteɪ.ʃən/" }
+            ],
+            emotions: [
+                { word: "Happy", translation: "Feliz", example: "I'm very happy today!", phonetic: "/ˈhæp.i/" },
+                { word: "Excited", translation: "Animado", example: "I'm excited about the trip!", phonetic: "/ɪkˈsaɪ.tɪd/" },
+                { word: "Nervous", translation: "Nervoso", example: "I feel nervous before exams.", phonetic: "/ˈnɜː.vəs/" },
+                { word: "Confident", translation: "Confiante", example: "She looks very confident.", phonetic: "/ˈkɑːn.fɪ.dənt/" },
+                { word: "Disappointed", translation: "Decepcionado", example: "I was disappointed with the result.", phonetic: "/ˌdɪs.əˈpɔɪn.tɪd/" },
+                { word: "Grateful", translation: "Grato", example: "I'm grateful for your help.", phonetic: "/ˈɡreɪt.fəl/" }
+            ]
+        };
+        
+        const achievements = [
+            { id: 'first_word', icon: '📝', name: 'Primeiras Palavras', description: 'Complete sua primeira frase', requirement: 1 },
+            { id: 'speaker', icon: '🎤', name: 'Orador', description: 'Complete 10 exercícios de fala', requirement: 10 },
+            { id: 'listener', icon: '👂', name: 'Ouvinte Atento', description: 'Complete 10 exercícios de audição', requirement: 10 },
+            { id: 'writer', icon: '✍️', name: 'Escritor', description: 'Complete 10 exercícios de escrita', requirement: 10 },
+            { id: 'polyglot', icon: '🌍', name: 'Poliglota', description: 'Aprenda 25 palavras de vocabulário', requirement: 25 },
+            { id: 'streak_3', icon: '🔥', name: 'Dedicação', description: 'Mantenha 3 dias consecutivos', requirement: 3 },
+            { id: 'streak_7', icon: '⚡', name: 'Persistência', description: 'Mantenha 7 dias consecutivos', requirement: 7 },
+            { id: 'streak_30', icon: '💎', name: 'Mestre da Disciplina', description: 'Mantenha 30 dias consecutivos', requirement: 30 },
+            { id: 'points_100', icon: '⭐', name: 'Colecionador', description: 'Alcance 100 pontos', requirement: 100 },
+            { id: 'points_500', icon: '🌟', name: 'Estrela Cadente', description: 'Alcance 500 pontos', requirement: 500 },
+            { id: 'points_1000', icon: '👑', name: 'Rei do Conhecimento', description: 'Alcance 1000 pontos', requirement: 1000 },
+            { id: 'challenge_master', icon: '🏆', name: 'Mestre dos Desafios', description: 'Complete 10 desafios diários', requirement: 10 }
+        ];
+        
+        const writingExercises = [ 
+            { type: 'fill-in-blank', topic: "Simple Present (I, You, We, They)", explanation: "Usamos o 'Simple Present' para falar de hábitos. Para 'I, you, we, they', usamos o verbo na forma base.", sentence: "They ___ English every day.", answer: "study", options: ["studies", "study", "studying"] },
+            { type: 'fill-in-blank', topic: "Simple Present (He, She, It)", explanation: "Para 'he, she, it', geralmente adicionamos 's' ao final do verbo.", sentence: "He ___ to music in the morning.", answer: "listens", options: ["listen", "listening", "listens"] },
+            { type: 'translate', topic: "Translation", explanation: "Traduza a frase do português para o inglês.", sentence: "Eu preciso de ajuda, por favor.", answer: "I need help, please.", options: ["I need helping, please.", "I need help, please.", "I helps, please."] },
+            { type: 'order-words', topic: "Sentence Structure", explanation: "Coloque as palavras na ordem correta para formar uma frase.", sentence: ["is", "reading", "She", "a", "book"], answer: "She is reading a book." },
+            { type: 'fill-in-blank', topic: "Present Continuous", explanation: "Usado para ações acontecendo agora. Formado por 'am/is/are' + verbo com '-ing'.", sentence: "She ___ a book at the moment.", answer: "is reading", options: ["reads", "is reading", "read"] },
+            { type: 'translate', topic: "Translation", explanation: "Traduza a frase do português para o inglês.", sentence: "Onde você mora?", answer: "Where do you live?", options: ["Where you live?", "Where do you lives?", "Where do you live?"] } 
+        ];
+        
+        const idioms = [ 
+            { idiom: "Break a leg", meaning: "Boa sorte (usado principalmente para desejar sorte a artistas antes de uma apresentação).", example_en: "You have a big exam tomorrow? Break a leg!", example_pt: "Você tem uma prova importante amanhã? Boa sorte!" }, 
+            { idiom: "Bite the bullet", meaning: "Enfrentar uma situação difícil com coragem.", example_en: "I have to work all weekend, but I'll just have to bite the bullet.", example_pt: "Tenho que trabalhar todo o fim de semana, mas terei que aguentar firme." }, 
+            { idiom: "Piece of cake", meaning: "Algo muito fácil de fazer.", example_en: "The test was a piece of cake.", example_pt: "A prova foi muito fácil." }, 
+            { idiom: "Hit the books", meaning: "Estudar com afinco.", example_en: "I have a final exam next week, so I need to hit the books.", example_pt: "Tenho uma prova final na próxima semana, então preciso mergulhar nos estudos." }, 
+            { idiom: "Once in a blue moon", meaning: "Algo que acontece muito raramente.", example_en: "I only go to the cinema once in a blue moon.", example_pt: "Eu só vou ao cinema muito raramente." }, 
+            { idiom: "The ball is in your court", meaning: "A decisão ou o próximo passo é responsabilidade de outra pessoa.", example_en: "I've done everything I can. Now the ball is in your court.", example_pt: "Eu fiz tudo que podia. Agora a decisão é sua." },
+            { idiom: "It's raining cats and dogs", meaning: "Está chovendo muito forte.", example_en: "I can't go out, it's raining cats and dogs!", example_pt: "Não posso sair, está chovendo muito forte!" },
+            { idiom: "Spill the beans", meaning: "Revelar um segredo.", example_en: "Come on, spill the beans! What happened?", example_pt: "Vamos lá, conte tudo! O que aconteceu?" }
+        ];
+        
+        const dailyChallenges = [
+            { type: 'order-words', topic: "Estrutura de Frase Complexa", explanation: "Coloque as palavras na ordem correta para formar uma pergunta.", sentence: ["have", "English", "been", "studying", "you", "How", "long"], answer: "How long have you been studying English" },
+            { type: 'listening', topic: "Compreensão Auditiva Rápida", explanation: "Ouça com atenção e digite a frase. A pronúncia pode ser mais rápida.", sentence: "I'm thinking of going to the beach this weekend.", answer: "I'm thinking of going to the beach this weekend." },
+            { type: 'translate', topic: "Tradução com Expressão", explanation: "Traduza a frase, prestando atenção na expressão idiomática.", sentence: "A prova foi muito fácil.", answer: "The test was a piece of cake." },
+        ];
+
+        // --- ESTADO DA APLICAÇÃO ---
+        let progress = {
+            score: 0,
+            speaking: { basic: [], intermediate: [], advanced: [] },
+            exercises: [],
+            vocabulary: [],
+            achievements: [],
+            lastChallengeCompleted: null,
+            challengesCompleted: 0,
+            lastActivityDate: null,
+            streak: 0,
+            level: 'Iniciante',
+            darkMode: false
+        };
+
+        // --- VARIÁVEIS DE CONTROLE E APIs DO NAVEGADOR ---
+        let currentLevel = '', currentPhraseIndex = 0, currentExerciseIndex = 0;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+        if(recognition) {
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+        }
+        const synth = window.speechSynthesis;
+        window.synth = synth;
+        window.recognition = recognition;
+
+        // --- LÓGICA DE NAVEGAÇÃO E TELAS ---
+        const screens = ['home-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen'];
+        
+        function showScreen(screenId) {
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+                targetScreen.classList.add('fade-in');
+            }
+
+            if (screenId === 'progress-screen') updateProgressView();
+            if (screenId === 'speaking-screen') {
+                document.getElementById('level-selection-speaking').classList.remove('hidden');
+                document.getElementById('practice-area-speaking').classList.add('hidden');
+            }
+            if (screenId === 'writing-screen') loadExercise(currentExerciseIndex);
+            if (screenId === 'listening-screen') loadListeningExercise();
+            if (screenId === 'idioms-screen') loadIdioms();
+            if (screenId === 'daily-challenge-screen') loadDailyChallenge();
+            if (screenId === 'vocabulary-screen') loadVocabulary('all');
+            if (screenId === 'achievements-screen') loadAchievements();
+            if (screenId === 'home-screen') updateHomeScreen();
+        }
+        
+        // --- DARK MODE ---
+        function toggleTheme() {
+            progress.darkMode = !progress.darkMode;
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('theme-icon');
+            icon.className = progress.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            saveProgress();
+        }
+        
+        // --- SISTEMA DE STREAK ---
+        function updateStreak() {
+            const today = getTodayString();
+            const yesterday = getYesterdayString();
+            
+            if (progress.lastActivityDate === today) {
+                // Já praticou hoje
+                return;
+            }
+            
+            if (progress.lastActivityDate === yesterday) {
+                // Manteve o streak
+                progress.streak += 1;
+            } else if (progress.lastActivityDate === null) {
+                // Primeira atividade
+                progress.streak = 1;
+            } else {
+                // Perdeu o streak
+                progress.streak = 1;
+            }
+            
+            progress.lastActivityDate = today;
+            saveProgress();
+            checkAchievements();
+        }
+        
+        function getYesterdayString() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+        }
+        
+        // --- SISTEMA DE NÍVEIS ---
+        function updateLevel() {
+            const score = progress.score;
+            let newLevel = 'Iniciante';
+            
+            if (score >= 1000) newLevel = 'Mestre';
+            else if (score >= 500) newLevel = 'Avançado';
+            else if (score >= 200) newLevel = 'Intermediário';
+            else if (score >= 50) newLevel = 'Básico';
+            
+            if (newLevel !== progress.level) {
+                progress.level = newLevel;
+                showAchievementPopup('🎉', `Parabéns! Você alcançou o nível ${newLevel}!`);
+            }
+        }
+        
+        // --- POPUP DE CONQUISTAS ---
+        function showAchievementPopup(icon, text) {
+            const popup = document.getElementById('achievement-popup');
+            document.getElementById('achievement-icon').textContent = icon;
+            document.getElementById('achievement-text').textContent = text;
+            
+            popup.classList.remove('hidden');
+            setTimeout(() => {
+                popup.classList.add('hidden');
+            }, 4000);
+        }
+        
+        // --- SISTEMA DE CONQUISTAS ---
+        function checkAchievements() {
+            achievements.forEach(achievement => {
+                if (progress.achievements.includes(achievement.id)) return;
+                
+                let unlocked = false;
+                const speakingTotal = progress.speaking.basic.length + progress.speaking.intermediate.length + progress.speaking.advanced.length;
+                
+                switch(achievement.id) {
+                    case 'first_word':
+                        unlocked = speakingTotal >= achievement.requirement;
+                        break;
+                    case 'speaker':
+                        unlocked = speakingTotal >= achievement.requirement;
+                        break;
+                    case 'listener':
+                        unlocked = progress.exercises.filter(e => e.startsWith('listening')).length >= achievement.requirement;
+                        break;
+                    case 'writer':
+                        unlocked = progress.exercises.filter(e => e.startsWith('writing')).length >= achievement.requirement;
+                        break;
+                    case 'polyglot':
+                        unlocked = progress.vocabulary.length >= achievement.requirement;
+                        break;
+                    case 'streak_3':
+                    case 'streak_7':
+                    case 'streak_30':
+                        unlocked = progress.streak >= achievement.requirement;
+                        break;
+                    case 'points_100':
+                    case 'points_500':
+                    case 'points_1000':
+                        unlocked = progress.score >= achievement.requirement;
+                        break;
+                    case 'challenge_master':
+                        unlocked = progress.challengesCompleted >= achievement.requirement;
+                        break;
+                }
+                
+                if (unlocked) {
+                    progress.achievements.push(achievement.id);
+                    showAchievementPopup(achievement.icon, `${achievement.name} desbloqueada!`);
+                    addPoints(25); // Bônus por conquista
+                }
+            });
+        }
+        
+         // --- CARREGAR CONQUISTAS ---
+         function loadAchievements() {
+             const list = document.getElementById('achievements-list');
+             list.innerHTML = '';
+             
+             achievements.forEach(achievement => {
+                 const unlocked = progress.achievements.includes(achievement.id);
+                 const card = document.createElement('div');
+                 card.className = `badge-item card p-6 rounded-2xl text-center ${unlocked ? '' : 'badge-locked'}`;
+                 card.innerHTML = `
+                     <div class="text-5xl mb-3">${achievement.icon}</div>
+                     <h3 class="font-bold text-lg mb-2 ${unlocked ? 'text-yellow-300' : 'text-gray-400'}">${achievement.name}</h3>
+                     <p class="text-sm opacity-75 ${unlocked ? 'text-gray-200' : 'text-gray-500'}">${achievement.description}</p>
+                     ${unlocked ? '<div class="mt-3 text-green-400 font-bold"><i class="fas fa-check-circle"></i> Desbloqueada</div>' : '<div class="mt-3 text-gray-500 font-semibold"><i class="fas fa-lock"></i> Bloqueada</div>'}
+                 `;
+                 list.appendChild(card);
+             });
+         }
+        
+        // --- CARREGAR VOCABULÁRIO ---
+        function loadVocabulary(category) {
+            // Atualizar botões ativos
+            document.querySelectorAll('.vocab-category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-white');
+                btn.classList.add('bg-white/80');
+            });
+            event?.target.classList.remove('bg-white/80');
+            event?.target.classList.add('active', 'bg-white');
+            
+            const list = document.getElementById('vocabulary-list');
+            list.innerHTML = '';
+            
+            let words = [];
+            if (category === 'all') {
+                Object.values(vocabulary).forEach(cat => words.push(...cat));
+            } else {
+                words = vocabulary[category] || [];
+            }
+            
+            words.forEach((item, index) => {
+                const learned = progress.vocabulary.includes(`${category}-${index}`);
+                const card = document.createElement('div');
+                card.className = 'vocab-card card p-5 rounded-2xl cursor-pointer';
+                 card.innerHTML = `
+                     <div class="vocab-card-inner relative h-48">
+                         <div class="vocab-card-front flex flex-col justify-center items-center h-full">
+                             <h3 class="text-3xl font-bold text-purple-200 mb-2">${item.word}</h3>
+                             <p class="text-sm text-purple-300">${item.phonetic}</p>
+                             <p class="text-sm mt-4 text-gray-300">✨ Clique para ver mais</p>
+                         </div>
+                         <div class="vocab-card-back flex flex-col justify-center items-center h-full p-4">
+                             <p class="text-2xl font-bold text-pink-300 mb-3">${item.translation}</p>
+                             <p class="text-sm italic mb-2 text-gray-200">"${item.example}"</p>
+                             <button onclick="markVocabLearned('${category}', ${index})" class="mt-3 ${learned ? 'bg-green-500' : 'bg-purple-600'} hover:${learned ? 'bg-green-600' : 'bg-purple-700'} text-white px-4 py-2 rounded-lg text-sm transition">
+                                 ${learned ? '✓ Aprendida' : 'Marcar como Aprendida'}
+                             </button>
+                         </div>
+                     </div>
+                 `;
+                card.onclick = function() {
+                    this.classList.toggle('flipped');
+                };
+                list.appendChild(card);
+            });
+        }
+        
+        function markVocabLearned(category, index) {
+            event.stopPropagation(); // Prevenir flip do card
+            const vocabId = `${category}-${index}`;
+            if (!progress.vocabulary.includes(vocabId)) {
+                progress.vocabulary.push(vocabId);
+                addPoints(5);
+                checkAchievements();
+                loadVocabulary(category);
+            }
+        }
+        
+        // --- ATUALIZAR HOME SCREEN ---
+        function updateHomeScreen() {
+            document.getElementById('user-score').textContent = progress.score;
+            document.getElementById('user-streak').textContent = progress.streak;
+            document.getElementById('user-level').textContent = progress.level;
+        }
+        
+        // --- LÓGICA DO DESAFIO DO DIA ---
+        function getTodayString() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+
+        function loadDailyChallenge() {
+            const todayStr = getTodayString();
+            const challengeContent = document.getElementById('challenge-content');
+            const challengeCompleted = document.getElementById('challenge-completed');
+
+            if (progress.lastChallengeCompleted === todayStr) {
+                challengeContent.classList.add('hidden');
+                challengeCompleted.classList.remove('hidden');
+            } else {
+                challengeContent.classList.remove('hidden');
+                challengeCompleted.classList.add('hidden');
+                
+                const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+                const challenge = dailyChallenges[dayOfYear % dailyChallenges.length];
+                
+                challengeContent.innerHTML = '';
+                challengeContent.dataset.answer = challenge.answer;
+                challengeContent.dataset.type = challenge.type;
+
+                 let exerciseHTML = `<h3 class="text-xl font-bold text-purple-300">${challenge.topic}</h3><p class="text-gray-200 mb-4">${challenge.explanation}</p>`;
+                
+                if (challenge.type === 'order-words') {
+                    const shuffledWords = [...challenge.sentence].sort(() => Math.random() - 0.5);
+                    exerciseHTML += `<div id="challenge-word-bank" class="flex flex-wrap gap-2 mb-3">${shuffledWords.map(word => `<span class="word-chip bg-gray-200 p-2 rounded-lg">${word}</span>`).join('')}</div><div id="challenge-answer-area" class="min-h-[56px] p-2 border-2 border-dashed border-gray-400 rounded-lg"></div>`;
+                } else if (challenge.type === 'listening') {
+                    window.currentChallengePhrase = challenge.sentence;
+                    exerciseHTML += `<button onclick="synth.speak(new SpeechSynthesisUtterance(window.currentChallengePhrase))" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg mb-4"><i class="fas fa-volume-up text-2xl"></i></button><input type="text" id="challenge-input" class="w-full p-2 border-2 border-purple-400 bg-gray-800 text-white rounded-lg focus:border-purple-300 focus:outline-none">`;
+                 } else if (challenge.type === 'translate') {
+                      exerciseHTML += `<p class="text-gray-200 mb-2">Traduza: "${challenge.sentence}"</p><input type="text" id="challenge-input" class="w-full p-2 border-2 border-purple-400 bg-gray-800 text-white rounded-lg focus:border-purple-300 focus:outline-none">`;
+                }
+
+                challengeContent.innerHTML = exerciseHTML + `<div id="challenge-feedback" class="h-6 mt-4 font-semibold"></div><button onclick="checkChallengeAnswer()" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition">Verificar Desafio</button>`;
+
+                if (challenge.type === 'order-words') {
+                    document.querySelectorAll('#challenge-word-bank .word-chip').forEach(chip => {
+                        chip.onclick = () => document.getElementById('challenge-answer-area').appendChild(chip);
+                    });
+                    document.getElementById('challenge-answer-area').onclick = (e) => {
+                        if (e.target.classList.contains('word-chip')) {
+                            document.getElementById('challenge-word-bank').appendChild(e.target);
+                        }
+                    };
+                }
+            }
+        }
+        
+        function checkChallengeAnswer() {
+            const content = document.getElementById('challenge-content');
+            const feedbackEl = document.getElementById('challenge-feedback');
+            const type = content.dataset.type;
+            const correctAnswer = content.dataset.answer;
+            let userAnswer = '';
+            
+            if (type === 'order-words') {
+                userAnswer = Array.from(document.querySelectorAll('#challenge-answer-area .word-chip')).map(c => c.textContent).join(' ');
+            } else {
+                userAnswer = document.getElementById('challenge-input').value.trim();
+            }
+
+            if (userAnswer.toLowerCase().replace(/[.,!?;]/g, '') === correctAnswer.toLowerCase().replace(/[.,!?;]/g, '')) {
+                feedbackEl.textContent = 'Correto! +50 pontos!';
+                feedbackEl.style.color = 'green';
+                addPoints(50);
+                progress.lastChallengeCompleted = getTodayString();
+                progress.challengesCompleted += 1;
+                updateStreak();
+                checkAchievements();
+                saveProgress();
+                setTimeout(() => showScreen('home-screen'), 1500);
+            } else {
+                feedbackEl.textContent = 'Incorreto. Tente novamente!';
+                feedbackEl.style.color = 'red';
+            }
+        }
+        
+         // --- LÓGICA DAS EXPRESSÕES ---
+         function loadIdioms() {
+             const listEl = document.getElementById('idioms-list');
+             listEl.innerHTML = '';
+             idioms.forEach(item => {
+                 const card = document.createElement('div');
+                 card.className = 'card p-5 rounded-xl';
+                 card.innerHTML = `
+                     <h3 class="text-xl font-bold text-purple-200">${item.idiom}</h3>
+                     <p class="text-gray-200 italic mt-1">"${item.meaning}"</p>
+                     <div class="mt-3 bg-purple-900 bg-opacity-30 p-3 rounded-lg border border-purple-500 border-opacity-30">
+                         <p class="font-semibold text-sm text-purple-300">Exemplo:</p>
+                         <p class="text-gray-100">"${item.example_en}"</p>
+                         <p class="text-sm text-gray-300">(${item.example_pt})</p>
+                     </div>
+                 `;
+                 listEl.appendChild(card);
+             });
+         }
+        
+        // --- LÓGICA DA FALA ---
+        function startSpeakingPractice(level) {
+            currentLevel = level;
+            currentPhraseIndex = 0;
+            document.getElementById('level-selection-speaking').classList.add('hidden');
+            document.getElementById('practice-area-speaking').classList.remove('hidden');
+            loadPhrase();
+        }
+
+        function loadPhrase() {
+            const phrase = phrases[currentLevel][currentPhraseIndex];
+            document.getElementById('phrase-en').textContent = phrase.en;
+            document.getElementById('phrase-pt').textContent = phrase.pt;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('user-speech').textContent = '';
+            document.getElementById('next-phrase-btn').classList.add('hidden');
+        }
+
+        function listenToPhrase() {
+            const phrase = phrases[currentLevel][currentPhraseIndex].en;
+            const utterance = new SpeechSynthesisUtterance(phrase);
+            utterance.lang = 'en-US';
+            synth.speak(utterance);
+        }
+
+        function recordAndCheck() {
+            if (!recognition) {
+                showInfoModal("Seu navegador não suporta o reconhecimento de voz.");
+                return;
+            }
+            const speakBtn = document.getElementById('speak-btn');
+            speakBtn.classList.add('mic-recording');
+            document.getElementById('feedback').textContent = 'Ouvindo...';
+            
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript;
+                document.getElementById('user-speech').textContent = `Você disse: "${speechResult}"`;
+                checkSpeech(speechResult);
+            };
+
+            recognition.onspeechend = function() {
+                stopRecordingAnimation();
+            };
+            
+            recognition.onerror = function(event) {
+                stopRecordingAnimation();
+                document.getElementById('feedback').textContent = 'Erro ou sem fala detectada.';
+            };
+        }
+
+        function stopRecordingAnimation() {
+            recognition.stop();
+            document.getElementById('speak-btn').classList.remove('mic-recording');
+        }
+        
+        function checkSpeech(speech) {
+            const originalPhrase = phrases[currentLevel][currentPhraseIndex].en;
+            const feedbackEl = document.getElementById('feedback');
+            
+            const normalizedOriginal = originalPhrase.trim().toLowerCase().replace(/[.,!?;]/g, '');
+            const normalizedSpeech = speech.trim().toLowerCase().replace(/[.,!?;]/g, '');
+
+            if (normalizedSpeech === normalizedOriginal) {
+                feedbackEl.textContent = "Perfeito!";
+                feedbackEl.style.color = 'green';
+                document.getElementById('next-phrase-btn').classList.remove('hidden');
+                updateSpeakingProgress();
+            } else {
+                feedbackEl.textContent = "Quase lá, tente de novo!";
+                feedbackEl.style.color = 'red';
+            }
+        }
+        
+        function nextPhrase() {
+            if (currentPhraseIndex < phrases[currentLevel].length - 1) {
+                currentPhraseIndex++;
+                loadPhrase();
+            } else {
+                showInfoModal('Parabéns! Você completou todas as frases deste nível.', () => showScreen('home-screen'));
+            }
+        }
+
+        // --- LÓGICA DE AUDIÇÃO ---
+        function loadListeningExercise() {
+            const allPhrases = [...phrases.basic, ...phrases.intermediate, ...phrases.advanced];
+            window.currentListeningPhrase = allPhrases[Math.floor(Math.random() * allPhrases.length)];
+            document.getElementById('listening-input').value = '';
+            document.getElementById('listening-feedback').textContent = '';
+            document.getElementById('next-listening-btn').classList.add('hidden');
+        }
+
+        function listenToExercisePhrase() {
+            const utterance = new SpeechSynthesisUtterance(window.currentListeningPhrase.en);
+            utterance.lang = 'en-US';
+            synth.speak(utterance);
+        }
+
+        function checkListeningAnswer() {
+            const userAnswer = document.getElementById('listening-input').value.trim().toLowerCase().replace(/[.,!?;]/g, '');
+            const correctAnswer = window.currentListeningPhrase.en.trim().toLowerCase().replace(/[.,!?;]/g, '');
+            const feedbackEl = document.getElementById('listening-feedback');
+            if (userAnswer === correctAnswer) {
+                feedbackEl.textContent = 'Correto!';
+                feedbackEl.style.color = 'green';
+                document.getElementById('next-listening-btn').classList.remove('hidden');
+                updateExerciseProgress('listening', window.currentListeningPhrase.en);
+            } else {
+                feedbackEl.textContent = 'Incorreto. Tente de novo.';
+                feedbackEl.style.color = 'red';
+            }
+        }
+        function nextListeningExercise() {
+            loadListeningExercise();
+        }
+
+        // --- LÓGICA DA ESCRITA ---
+        function loadExercise(index) {
+            const exercise = writingExercises[index];
+            document.getElementById('topic-title').textContent = exercise.topic;
+            document.getElementById('topic-explanation').textContent = exercise.explanation;
+            const exerciseArea = document.getElementById('exercise-area');
+            exerciseArea.dataset.type = exercise.type;
+            
+            let exerciseHTML = '';
+             if (exercise.type === 'fill-in-blank') {
+                 const parts = exercise.sentence.split('___');
+                 exerciseHTML = `<p class="flex flex-wrap items-center gap-2 text-lg text-gray-200">${parts[0]} <input type="text" id="writing-input" class="border-b-2 border-purple-400 bg-gray-800 text-white focus:outline-none focus:border-purple-300 w-24 text-center"> ${parts[1] || ''}</p>`;
+             } else if (exercise.type === 'translate') {
+                 exerciseHTML = `<p class="text-gray-200 mb-2">Traduza: "${exercise.sentence}"</p><input type="text" id="writing-input" class="w-full p-2 border-2 border-purple-400 bg-gray-800 text-white rounded-lg focus:outline-none focus:border-purple-300">`;
+            } else if (exercise.type === 'order-words') {
+                const shuffledWords = [...exercise.sentence].sort(() => Math.random() - 0.5);
+                exerciseHTML = `<p class="text-gray-200 mb-3">Coloque em ordem:</p><div id="word-bank" class="flex flex-wrap gap-2 mb-3">${shuffledWords.map(word => `<span class="word-chip p-2 rounded-lg">${word}</span>`).join('')}</div><div id="answer-area" class="h-14 p-2 border-2 border-dashed border-purple-400 rounded-lg bg-gray-900 bg-opacity-30"></div>`;
+            }
+            
+            if (exercise.options) {
+                const shuffledOptions = [...exercise.options].sort(() => Math.random() - 0.5);
+                exerciseHTML += `
+                    <div class="mt-6 pt-4 border-t border-purple-500 border-opacity-30">
+                        <p class="text-sm text-purple-300 font-semibold mb-2 text-center">💡 Precisa de uma dica? Aqui estão algumas opções:</p>
+                        <div class="flex justify-center flex-wrap gap-3">
+                            ${shuffledOptions.map(opt => `<span class="bg-purple-900 bg-opacity-40 border border-purple-400 border-opacity-40 text-purple-200 py-1 px-3 rounded-full text-sm">${opt}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            exerciseArea.innerHTML = exerciseHTML;
+
+            if (exercise.type === 'order-words') {
+                document.querySelectorAll('#word-bank .word-chip').forEach(chip => {
+                    chip.onclick = () => { document.getElementById('answer-area').appendChild(chip); }
+                });
+                document.getElementById('answer-area').onclick = (e) => {
+                    if (e.target.classList.contains('word-chip')) {
+                        document.getElementById('word-bank').appendChild(e.target);
+                    }
+                };
+            }
+            
+            document.getElementById('writing-feedback').textContent = '';
+            document.getElementById('next-exercise-btn').classList.add('hidden');
+        }
+        
+        function checkWritingAnswer() {
+            const exercise = writingExercises[currentExerciseIndex];
+            const feedbackEl = document.getElementById('writing-feedback');
+            let userAnswerRaw = '';
+            if (exercise.type === 'order-words') {
+                userAnswerRaw = Array.from(document.querySelectorAll('#answer-area .word-chip')).map(chip => chip.textContent).join(' ');
+            } else {
+                const inputElement = document.getElementById('writing-input');
+                if (inputElement) {
+                    userAnswerRaw = inputElement.value;
+                }
+            }
+
+            const normalizedUserAnswer = userAnswerRaw.trim().toLowerCase().replace(/[.,!?;]/g, '');
+            const normalizedCorrectAnswer = exercise.answer.trim().toLowerCase().replace(/[.,!?;]/g, '');
+
+            if (normalizedUserAnswer === normalizedCorrectAnswer) {
+                feedbackEl.textContent = 'Correto!';
+                feedbackEl.style.color = 'green';
+                document.getElementById('next-exercise-btn').classList.remove('hidden');
+                updateExerciseProgress('writing', currentExerciseIndex);
+            } else {
+                feedbackEl.textContent = 'Incorreto, tente de novo.';
+                feedbackEl.style.color = 'red';
+            }
+        }
+
+        function nextExercise() {
+            if (currentExerciseIndex < writingExercises.length - 1) {
+                currentExerciseIndex++;
+                loadExercise(currentExerciseIndex);
+            } else {
+                showInfoModal('Parabéns! Você completou todos os exercícios de escrita.', () => showScreen('home-screen'));
+            }
+        }
+
+        // --- LÓGICA DE PROGRESSO ---
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('fluencyMasterProgress');
+            if (savedProgress) {
+                const loadedProgress = JSON.parse(savedProgress);
+                // Mesclar com valores padrão para campos novos
+                progress = {
+                    score: 0,
+                    speaking: { basic: [], intermediate: [], advanced: [] },
+                    exercises: [],
+                    vocabulary: [],
+                    achievements: [],
+                    lastChallengeCompleted: null,
+                    challengesCompleted: 0,
+                    lastActivityDate: null,
+                    streak: 0,
+                    level: 'Iniciante',
+                    darkMode: false,
+                    ...loadedProgress
+                };
+            }
+            
+            // Aplicar dark mode se salvo
+            if (progress.darkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').className = 'fas fa-sun';
+            }
+            
+            updateScoreView();
+            updateLevel();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('fluencyMasterProgress', JSON.stringify(progress));
+            updateScoreView();
+            updateLevel();
+        }
+
+        function updateScoreView() {
+            const scoreEl = document.getElementById('user-score');
+            if (scoreEl) scoreEl.textContent = progress.score;
+            
+            const streakEl = document.getElementById('user-streak');
+            if (streakEl) streakEl.textContent = progress.streak;
+            
+            const levelEl = document.getElementById('user-level');
+            if (levelEl) levelEl.textContent = progress.level;
+        }
+
+        function addPoints(points) {
+            progress.score += points;
+            saveProgress();
+        }
+
+        function updateSpeakingProgress() {
+            const phraseIdentifier = `${currentLevel}-${currentPhraseIndex}`;
+            if (!progress.speaking[currentLevel].includes(phraseIdentifier)) {
+                progress.speaking[currentLevel].push(phraseIdentifier);
+                let points = 10;
+                if (currentLevel === 'intermediate') points = 20;
+                if (currentLevel === 'advanced') points = 30;
+                addPoints(points);
+                updateStreak();
+                checkAchievements();
+            }
+        }
+
+        function updateExerciseProgress(type, id) {
+            const exerciseId = `${type}-${id}`;
+            if (!progress.exercises.includes(exerciseId)) {
+                progress.exercises.push(exerciseId);
+                addPoints(15);
+                updateStreak();
+                checkAchievements();
+            }
+        }
+
+        function updateProgressView() {
+            document.getElementById('progress-score').innerHTML = `<i class="fas fa-star"></i> ${progress.score}`;
+            document.getElementById('progress-streak').textContent = progress.streak;
+            
+            ['basic', 'intermediate', 'advanced'].forEach(level => {
+                const total = phrases[level].length;
+                const completed = progress.speaking[level].length;
+                const percentage = total > 0 ? (completed / total) * 100 : 0;
+                document.getElementById(`${level}-progress-label`).textContent = `${completed}/${total}`;
+                document.getElementById(`${level}-progress-bar`).style.width = `${percentage}%`;
+            });
+            
+            document.getElementById('exercises-progress-label').textContent = progress.exercises.length;
+            document.getElementById('vocab-progress-label').textContent = progress.vocabulary.length;
+        }
+
+        function handleResetProgress() {
+            showConfirmModal("Tem certeza que quer resetar seu progresso?", () => {
+                progress = {
+                    score: 0,
+                    speaking: {
+                        basic: [],
+                        intermediate: [],
+                        advanced: []
+                    },
+                    exercises: [],
+                    vocabulary: [],
+                    achievements: [],
+                    lastChallengeCompleted: null,
+                    challengesCompleted: 0,
+                    lastActivityDate: null,
+                    streak: 0,
+                    level: 'Iniciante',
+                    darkMode: progress.darkMode // Manter preferência de tema
+                };
+                saveProgress();
+                updateProgressView();
+                updateHomeScreen();
+                showInfoModal("Seu progresso foi resetado.");
+            });
+        }
+        
+        // --- MODAL ---
+        const modal = document.getElementById('custom-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const modalButtons = document.getElementById('modal-buttons');
+
+         function showInfoModal(message, onOk) {
+             modalMessage.textContent = message;
+             modalMessage.className = 'mb-5 text-lg text-gray-200';
+             modalButtons.innerHTML = `<button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-8 rounded-lg shadow-lg transition transform hover:scale-105">OK</button>`;
+            modalButtons.firstElementChild.onclick = () => {
+                hideModal();
+                if (onOk) onOk();
+            };
+            modal.classList.remove('hidden');
+        }
+
+         function showConfirmModal(message, onConfirm) {
+             modalMessage.textContent = message;
+             modalMessage.className = 'mb-5 text-lg text-gray-200';
+             modalButtons.innerHTML = `
+                 <button id="confirm-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg mr-2 shadow-lg transition transform hover:scale-105">Sim</button>
+                 <button id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition transform hover:scale-105">Cancelar</button>
+             `;
+            document.getElementById('confirm-btn').onclick = () => {
+                hideModal();
+                onConfirm();
+            };
+            document.getElementById('cancel-btn').onclick = hideModal;
+            modal.classList.remove('hidden');
+        }
+
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+
+        // --- INICIALIZAÇÃO ---
+        window.onload = () => {
+            loadProgress();
+            updateHomeScreen();
+            checkAchievements();
+            showScreen('home-screen');
+        };
+    </script>
+</body>
+</html>
