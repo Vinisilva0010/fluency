@@ -1,0 +1,40 @@
+# Git Attributes para Fluency Master
+
+# Normalização de quebras de linha
+* text=auto
+
+# Documentos
+*.md text
+*.txt text
+
+# Web
+*.html text diff=html
+*.css text diff=css
+*.js text
+*.json text
+
+# Vídeos e Mídia (LFS recomendado para arquivos grandes)
+*.mp4 binary
+*.mov binary
+*.avi binary
+*.webm binary
+
+# Imagens
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Fontes
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary
+
+# Arquivos de configuração
+.gitignore text
+.gitattributes text
+netlify.toml text
+

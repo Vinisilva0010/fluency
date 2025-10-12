@@ -1,0 +1,12 @@
+# robots.txt para Fluency Master
+
+User-agent: *
+Allow: /
+
+# Sitemap (ajuste a URL após o deploy)
+# Sitemap: https://seu-site.netlify.app/sitemap.xml
+
+# Bloquear acesso a pastas sensíveis (se houver no futuro)
+Disallow: /admin/
+Disallow: /*.json$
+
