@@ -1,12 +1,12 @@
 // --- INICIALIZAÇÃO DO FIREBASE ---
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-  appId: "SEU_APP_ID"
-};
+    apiKey: "AIzaSyCP9mHVgXfEfmWG5SrsU_c927TZZG8DQxk",
+    authDomain: "fluency-master-app.firebaseapp.com",
+    projectId: "fluency-master-app",
+    storageBucket: "fluency-master-app.firebasestorage.app",
+    messagingSenderId: "764090435095",
+    appId: "1:764090435095:web:ad82337327d8a5dc473e52"
+  };
 
 // Inicializa o Firebase
 const app = firebase.initializeApp(firebaseConfig);
