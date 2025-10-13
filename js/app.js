@@ -652,7 +652,8 @@ let progress = {
     darkMode: false,
     completedQuizzes: [],
     completedConversations: [],
-    levelSuggestionShown: { basic: false, intermediate: false }
+    levelSuggestionShown: { basic: false, intermediate: false },
+    hasSeenInstallationPrompt: false
 };
 
 // --- VARIÁVEIS DE CONTROLE E APIs DO NAVEGADOR ---
@@ -1568,6 +1569,65 @@ const modal = document.getElementById('custom-modal');
 const modalMessage = document.getElementById('modal-message');
 const modalButtons = document.getElementById('modal-buttons');
 
+// --- INSTRUÇÕES DE INSTALAÇÃO PWA ---
+function showInstallationInstructions() {
+    // Verificar se o usuário já viu o prompt
+    if (progress.hasSeenInstallationPrompt) {
+        return;
+    }
+    
+    // Criar conteúdo HTML para as instruções
+    const instructionsHTML = `
+        <div class="text-left space-y-4">
+            <div class="text-center mb-4">
+                <i class="fas fa-mobile-alt text-5xl text-purple-400 mb-3"></i>
+                <p class="text-lg text-gray-200">
+                    <strong>Instale nosso app</strong> na sua tela inicial para uma experiência ainda melhor!
+                </p>
+            </div>
+            
+            <div class="bg-gradient-to-r from-green-900/30 to-green-800/30 p-4 rounded-lg border border-green-500/30">
+                <h3 class="font-bold text-green-300 mb-2 flex items-center">
+                    <i class="fab fa-android text-2xl mr-2"></i> Android (Chrome)
+                </h3>
+                <ol class="text-sm text-gray-200 space-y-1 ml-4">
+                    <li>1. Toque no menu <strong>⋮</strong> (três pontos) no canto superior direito</li>
+                    <li>2. Selecione <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar app"</strong></li>
+                    <li>3. Confirme tocando em <strong>"Adicionar"</strong></li>
+                </ol>
+            </div>
+            
+            <div class="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-4 rounded-lg border border-blue-500/30">
+                <h3 class="font-bold text-blue-300 mb-2 flex items-center">
+                    <i class="fab fa-apple text-2xl mr-2"></i> iPhone/iPad (Safari)
+                </h3>
+                <ol class="text-sm text-gray-200 space-y-1 ml-4">
+                    <li>1. Toque no botão <strong>Compartilhar</strong> <i class="fas fa-share"></i> na barra inferior</li>
+                    <li>2. Role e toque em <strong>"Adicionar à Tela de Início"</strong></li>
+                    <li>3. Toque em <strong>"Adicionar"</strong> no canto superior direito</li>
+                </ol>
+            </div>
+            
+            <div class="text-center mt-4 text-sm text-gray-400">
+                <i class="fas fa-info-circle"></i> Você poderá usar o app offline e receber notificações!
+            </div>
+        </div>
+    `;
+    
+    // Exibir o modal com as instruções
+    modalMessage.innerHTML = instructionsHTML;
+    modalMessage.className = 'mb-5';
+    modalButtons.innerHTML = `<button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:scale-105">Entendi!</button>`;
+    modalButtons.firstElementChild.onclick = () => {
+        hideModal();
+    };
+    modal.classList.remove('hidden');
+    
+    // Marcar como visualizado e salvar
+    progress.hasSeenInstallationPrompt = true;
+    saveProgress();
+}
+
  function showInfoModal(message, onOk) {
      modalMessage.textContent = message;
      modalMessage.className = 'mb-5 text-lg text-gray-200';
@@ -1838,7 +1898,14 @@ window.onload = () => {
             // Usuário está logado
             currentUser = user;
             console.log("Estado de autenticação: Logado", user.email);
-            // Aqui você pode, por exemplo, mudar um botão de 'Login' para 'Sair'
+            
+            // Verificar se é o primeiro login (primeira vez que o usuário acessa)
+            if (user.metadata.creationTime === user.metadata.lastSignInTime) {
+                // É o primeiro login! Mostrar instruções de instalação do PWA
+                setTimeout(() => {
+                    showInstallationInstructions();
+                }, 1000); // Delay de 1 segundo para melhor UX
+            }
         } else {
             // Usuário está deslogado
             currentUser = null;
