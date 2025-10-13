@@ -1,3 +1,18 @@
+// --- INICIALIZAÇÃO DO FIREBASE ---
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE_BUCKET",
+  messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+  appId: "SEU_APP_ID"
+};
+
+// Inicializa o Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+let currentUser = null; // Variável para guardar o usuário logado
+
 // --- BANCO DE DADOS ---
 const phrases = {
     basic: [ 
@@ -722,9 +737,19 @@ window.synth = synth;
 window.recognition = recognition;
 
 // --- LÓGICA DE NAVEGAÇÃO E TELAS ---
-const screens = ['home-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen', 'media-quiz-screen', 'culture-screen', 'conversation-screen'];
+const screens = ['home-screen', 'login-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen', 'media-quiz-screen', 'culture-screen', 'conversation-screen'];
 
 function showScreen(screenId) {
+    // Lista de telas públicas que não exigem login
+    const publicScreens = ['home-screen', 'login-screen'];
+
+    // Se o usuário não estiver logado e tentar acessar uma tela protegida...
+    if (!currentUser && !publicScreens.includes(screenId)) {
+        // ...redirecione para a tela de login.
+        showScreen('login-screen');
+        return;
+    }
+
     screens.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
@@ -749,6 +774,69 @@ function showScreen(screenId) {
     if (screenId === 'media-quiz-screen') loadMediaQuiz();
     if (screenId === 'culture-screen') loadCulture();
     if (screenId === 'home-screen') updateHomeScreen();
+}
+
+// --- FUNÇÕES DE AUTENTICAÇÃO ---
+function toggleAuthForms(event) {
+    event.preventDefault();
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const toggleText = document.getElementById('toggle-text');
+    const toggleLink = document.getElementById('toggle-link');
+    const title = document.getElementById('login-title');
+
+    if (loginForm.classList.contains('hidden')) {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        title.textContent = 'Acessar Conta';
+        toggleText.textContent = 'Não tem uma conta?';
+        toggleLink.textContent = 'Crie uma agora';
+    } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        title.textContent = 'Criar Conta';
+        toggleText.textContent = 'Já tem uma conta?';
+        toggleLink.textContent = 'Faça login';
+    }
+}
+
+function handleLogin() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('auth-error');
+    
+    auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            console.log('Usuário logado:', userCredential.user);
+            errorEl.textContent = '';
+            showScreen('home-screen');
+        })
+        .catch(error => {
+            errorEl.textContent = 'E-mail ou senha inválidos.';
+        });
+}
+
+function handleRegister() {
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const errorEl = document.getElementById('auth-error');
+
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            console.log('Usuário criado:', userCredential.user);
+            errorEl.textContent = '';
+            showScreen('home-screen');
+        })
+        .catch(error => {
+            errorEl.textContent = 'Erro ao criar conta. Verifique os dados.';
+        });
+}
+
+function handleLogout() {
+    auth.signOut().then(() => {
+        console.log('Usuário deslogado');
+        showScreen('home-screen'); // Pode redirecionar para login-screen se preferir
+    });
 }
 
 // --- DARK MODE ---
@@ -1738,6 +1826,21 @@ function renderStep(topic, stepId) {
 // --- INICIALIZAÇÃO ---
 window.onload = () => {
     loadProgress();
+    
+    // OUVINTE DE AUTENTICAÇÃO
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // Usuário está logado
+            currentUser = user;
+            console.log("Estado de autenticação: Logado", user.email);
+            // Aqui você pode, por exemplo, mudar um botão de 'Login' para 'Sair'
+        } else {
+            // Usuário está deslogado
+            currentUser = null;
+            console.log("Estado de autenticação: Deslogado");
+        }
+    });
+    
     updateHomeScreen();
     checkAchievements();
     showScreen('home-screen');
