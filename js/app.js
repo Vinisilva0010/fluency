@@ -123,75 +123,6 @@ const idioms = [
     { idiom: "Spill the beans", meaning: "Revelar um segredo.", example_en: "Come on, spill the beans! What happened?", example_pt: "Vamos lá, conte tudo! O que aconteceu?" }
 ];
 
-const mediaQuizzes = [
-    {
-        id: 'quiz1',
-        title: 'English Conversation for Beginners',
-        youtubeId: 'sn6nMp_ELSw',
-        questions: [
-            {
-                question: 'What is the main topic of the video?',
-                options: ['Daily routines', 'Basic greetings and introductions', 'Shopping vocabulary', 'Travel tips'],
-                correct: 1
-            },
-            {
-                question: 'Which phrase is commonly used to ask someone\'s name?',
-                options: ['How old are you?', 'Where are you from?', 'What is your name?', 'What do you do?'],
-                correct: 2
-            },
-            {
-                question: 'What does "Nice to meet you" mean?',
-                options: ['Goodbye', 'Prazer em conhecê-lo', 'How are you?', 'Thank you'],
-                correct: 1
-            }
-        ]
-    },
-    {
-        id: 'quiz2',
-        title: 'Learn English Through Story',
-        youtubeId: 'LOl8KMDfsjk',
-        questions: [
-            {
-                question: 'What type of content is this video?',
-                options: ['A documentary', 'A news report', 'A story for learning', 'A song'],
-                correct: 2
-            },
-            {
-                question: 'Why are stories good for learning English?',
-                options: ['They are boring', 'They provide context and vocabulary', 'They are too difficult', 'They are only for children'],
-                correct: 1
-            },
-            {
-                question: 'What should you do while watching?',
-                options: ['Sleep', 'Pay attention and take notes', 'Skip parts', 'Watch in fast mode'],
-                correct: 1
-            }
-        ]
-    },
-    {
-        id: 'quiz3',
-        title: 'English Listening Practice',
-        youtubeId: 'xZMxCg3rMk4',
-        questions: [
-            {
-                question: 'What skill does this video help improve?',
-                options: ['Writing', 'Listening', 'Grammar', 'Pronunciation only'],
-                correct: 1
-            },
-            {
-                question: 'Why is listening practice important?',
-                options: ['It\'s not important', 'To understand native speakers', 'Only for exams', 'Just for fun'],
-                correct: 1
-            },
-            {
-                question: 'What should you do if you don\'t understand something?',
-                options: ['Give up', 'Listen again and use context', 'Skip it', 'Only read subtitles'],
-                correct: 1
-            }
-        ]
-    }
-];
-
 const cultureTips = [
     {
         title: 'Pedindo Comida em um Restaurante',
@@ -737,7 +668,7 @@ window.synth = synth;
 window.recognition = recognition;
 
 // --- LÓGICA DE NAVEGAÇÃO E TELAS ---
-const screens = ['home-screen', 'login-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen', 'media-quiz-screen', 'culture-screen', 'conversation-screen'];
+const screens = ['home-screen', 'login-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen', 'culture-screen', 'conversation-screen'];
 
 function showScreen(screenId) {
     // Lista de telas públicas que não exigem login
@@ -771,7 +702,6 @@ function showScreen(screenId) {
     if (screenId === 'daily-challenge-screen') loadDailyChallenge();
     if (screenId === 'vocabulary-screen') loadVocabulary('all');
     if (screenId === 'achievements-screen') loadAchievements();
-    if (screenId === 'media-quiz-screen') loadMediaQuiz();
     if (screenId === 'culture-screen') loadCulture();
     if (screenId === 'home-screen') updateHomeScreen();
 }
@@ -1151,35 +1081,119 @@ function startSpeakingPractice(level) {
 
 function loadPhrase() {
     const phrase = phrases[currentLevel][currentPhraseIndex];
-    document.getElementById('phrase-en').textContent = phrase.en;
-    document.getElementById('phrase-pt').textContent = phrase.pt;
-    document.getElementById('feedback').textContent = '';
-    document.getElementById('user-speech').textContent = '';
+    const totalPhrases = phrases[currentLevel].length;
+    
+    // Exibe a frase em inglês com destaque
+    document.getElementById('phrase-en').innerHTML = `
+        <span class="text-white font-bold">${phrase.en}</span>
+        <br>
+        <span class="text-xs text-purple-300 mt-1 block">📊 Frase ${currentPhraseIndex + 1} de ${totalPhrases}</span>
+    `;
+    
+    // Exibe a tradução de forma mais didática
+    document.getElementById('phrase-pt').innerHTML = `
+        <i class="fas fa-language mr-1"></i> 
+        <strong>Tradução:</strong> ${phrase.pt}
+        <br>
+        <span class="text-xs text-gray-400 mt-1 block">
+            <i class="fas fa-lightbulb"></i> 
+            <strong>Dica:</strong> Clique em 
+            <i class="fas fa-volume-up"></i> para ouvir a pronúncia nativa primeiro!
+        </span>
+    `;
+    
+    document.getElementById('feedback').innerHTML = '';
+    document.getElementById('user-speech').innerHTML = '';
     document.getElementById('next-phrase-btn').classList.add('hidden');
+    
+    // Dica automática para iniciantes
+    if (currentLevel === 'basic' && currentPhraseIndex === 0) {
+        setTimeout(() => {
+            document.getElementById('feedback').innerHTML = `
+                <i class="fas fa-info-circle"></i> 
+                <strong>Começando:</strong> Ouça a frase primeiro, depois tente repeti-la!
+            `;
+            document.getElementById('feedback').style.color = '#60a5fa';
+        }, 500);
+    }
 }
 
 function listenToPhrase() {
     const phrase = phrases[currentLevel][currentPhraseIndex].en;
     const utterance = new SpeechSynthesisUtterance(phrase);
+    
+    // Configurações para melhor pronúncia
     utterance.lang = 'en-US';
+    utterance.rate = 0.85; // Fala um pouco mais devagar para ajudar no aprendizado
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    // Feedback visual durante a reprodução
+    const listenBtn = document.getElementById('listen-btn');
+    listenBtn.style.transform = 'scale(1.1)';
+    listenBtn.style.backgroundColor = '#3b82f6';
+    
+    utterance.onend = function() {
+        listenBtn.style.transform = 'scale(1)';
+        listenBtn.style.backgroundColor = '';
+        
+        // Dica didática
+        const feedbackEl = document.getElementById('feedback');
+        if (!feedbackEl.innerHTML) {
+            feedbackEl.innerHTML = '<i class="fas fa-microphone-alt"></i> Agora é sua vez! Clique no microfone e repita.';
+            feedbackEl.style.color = '#60a5fa';
+        }
+    };
+    
     synth.speak(utterance);
 }
 
 function recordAndCheck() {
     if (!recognition) {
-        showInfoModal("Seu navegador não suporta o reconhecimento de voz.");
+        showInfoModal("Seu navegador não suporta o reconhecimento de voz. Use Chrome ou Edge!");
         return;
     }
-    const speakBtn = document.getElementById('speak-btn');
-    speakBtn.classList.add('mic-recording');
-    document.getElementById('feedback').textContent = 'Ouvindo...';
     
-    recognition.start();
+    const speakBtn = document.getElementById('speak-btn');
+    const feedbackEl = document.getElementById('feedback');
+    
+    // Configurações avançadas para melhor reconhecimento
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 3; // Considera até 3 alternativas
+    recognition.continuous = false;
+    
+    speakBtn.classList.add('mic-recording');
+    feedbackEl.innerHTML = '<i class="fas fa-microphone-alt"></i> Estou ouvindo... Fale agora!';
+    feedbackEl.style.color = '#60a5fa'; // Azul
+    
+    try {
+        recognition.start();
+    } catch (e) {
+        stopRecordingAnimation();
+        feedbackEl.textContent = 'Aguarde um momento antes de tentar novamente...';
+        feedbackEl.style.color = 'orange';
+        return;
+    }
 
     recognition.onresult = function(event) {
-        const speechResult = event.results[0][0].transcript;
-        document.getElementById('user-speech').textContent = `Você disse: "${speechResult}"`;
-        checkSpeech(speechResult);
+        const alternatives = event.results[0];
+        let bestMatch = null;
+        let bestScore = 0;
+        
+        // Analisa todas as alternativas fornecidas pelo reconhecimento
+        for (let i = 0; i < alternatives.length; i++) {
+            const alternative = alternatives[i];
+            const score = calculateSimilarity(alternative.transcript, phrases[currentLevel][currentPhraseIndex].en);
+            
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = alternative.transcript;
+            }
+        }
+        
+        document.getElementById('user-speech').innerHTML = `<i class="fas fa-user"></i> Você disse: "<strong>${bestMatch}</strong>"`;
+        checkSpeech(bestMatch, bestScore);
     };
 
     recognition.onspeechend = function() {
@@ -1188,32 +1202,116 @@ function recordAndCheck() {
     
     recognition.onerror = function(event) {
         stopRecordingAnimation();
-        document.getElementById('feedback').textContent = 'Erro ou sem fala detectada.';
+        
+        if (event.error === 'no-speech') {
+            feedbackEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nenhuma fala detectada. Tente falar mais alto!';
+            feedbackEl.style.color = 'orange';
+        } else if (event.error === 'audio-capture') {
+            feedbackEl.innerHTML = '<i class="fas fa-times-circle"></i> Microfone não detectado. Verifique suas permissões!';
+            feedbackEl.style.color = 'red';
+        } else if (event.error === 'not-allowed') {
+            feedbackEl.innerHTML = '<i class="fas fa-ban"></i> Permissão negada. Habilite o microfone para usar esta função.';
+            feedbackEl.style.color = 'red';
+        } else {
+            feedbackEl.innerHTML = `<i class="fas fa-times-circle"></i> Erro: ${event.error}. Tente novamente!`;
+            feedbackEl.style.color = 'red';
+        }
+    };
+    
+    recognition.onstart = function() {
+        feedbackEl.innerHTML = '<i class="fas fa-microphone-alt pulse"></i> Gravando... Fale naturalmente!';
+        feedbackEl.style.color = '#ef4444'; // Vermelho durante gravação
     };
 }
 
 function stopRecordingAnimation() {
-    recognition.stop();
+    try {
+        recognition.stop();
+    } catch (e) {
+        // Ignora erros se já estiver parado
+    }
     document.getElementById('speak-btn').classList.remove('mic-recording');
 }
 
-function checkSpeech(speech) {
+// Função melhorada para calcular similaridade entre strings
+function calculateSimilarity(str1, str2) {
+    const normalizedStr1 = str1.trim().toLowerCase().replace(/[.,!?;:'"-]/g, '');
+    const normalizedStr2 = str2.trim().toLowerCase().replace(/[.,!?;:'"-]/g, '');
+    
+    if (normalizedStr1 === normalizedStr2) return 100;
+    
+    // Calcula a distância de Levenshtein (similaridade)
+    const words1 = normalizedStr1.split(/\s+/);
+    const words2 = normalizedStr2.split(/\s+/);
+    
+    let matchingWords = 0;
+    words1.forEach(word1 => {
+        if (words2.some(word2 => word2 === word1 || levenshteinDistance(word1, word2) <= 1)) {
+            matchingWords++;
+        }
+    });
+    
+    return (matchingWords / Math.max(words1.length, words2.length)) * 100;
+}
+
+// Algoritmo de Levenshtein para medir distância entre palavras
+function levenshteinDistance(str1, str2) {
+    const matrix = [];
+    
+    for (let i = 0; i <= str2.length; i++) {
+        matrix[i] = [i];
+    }
+    
+    for (let j = 0; j <= str1.length; j++) {
+        matrix[0][j] = j;
+    }
+    
+    for (let i = 1; i <= str2.length; i++) {
+        for (let j = 1; j <= str1.length; j++) {
+            if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    
+    return matrix[str2.length][str1.length];
+}
+
+function checkSpeech(speech, similarityScore) {
     const originalPhrase = phrases[currentLevel][currentPhraseIndex].en;
     const feedbackEl = document.getElementById('feedback');
     
-    const normalizedOriginal = originalPhrase.trim().toLowerCase().replace(/[.,!?;]/g, '');
-    const normalizedSpeech = speech.trim().toLowerCase().replace(/[.,!?;]/g, '');
-
-    if (normalizedSpeech === normalizedOriginal) {
-        feedbackEl.textContent = "Perfeito!";
-        feedbackEl.style.color = 'green';
+    if (similarityScore >= 95) {
+        // Perfeito ou quase perfeito!
+        feedbackEl.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Perfeito!</strong> Pronúncia excelente! 🎉';
+        feedbackEl.style.color = '#10b981'; // Verde
         document.getElementById('next-phrase-btn').classList.remove('hidden');
         updateSpeakingProgress();
-        // Verificar se deve sugerir avanço de nível
         checkLevelSuggestion();
+        
+    } else if (similarityScore >= 80) {
+        // Muito bom!
+        feedbackEl.innerHTML = '<i class="fas fa-thumbs-up"></i> <strong>Muito bom!</strong> Pequenas diferenças, mas compreensível! ✨';
+        feedbackEl.style.color = '#10b981';
+        document.getElementById('next-phrase-btn').classList.remove('hidden');
+        updateSpeakingProgress();
+        checkLevelSuggestion();
+        
+    } else if (similarityScore >= 60) {
+        // Quase lá!
+        feedbackEl.innerHTML = `<i class="fas fa-redo"></i> <strong>Quase lá!</strong> ${Math.round(similarityScore)}% correto. Tente pronunciar mais devagar: "<em>${originalPhrase}</em>"`;
+        feedbackEl.style.color = '#f59e0b'; // Laranja
+        
     } else {
-        feedbackEl.textContent = "Quase lá, tente de novo!";
-        feedbackEl.style.color = 'red';
+        // Precisa melhorar
+        feedbackEl.innerHTML = `<i class="fas fa-volume-up"></i> Ops! Não entendi bem. <br><strong>Dica:</strong> Clique em <i class="fas fa-volume-up"></i> para ouvir a pronúncia correta primeiro!`;
+        feedbackEl.style.color = '#ef4444'; // Vermelho
     }
 }
 
@@ -1498,99 +1596,6 @@ const modalButtons = document.getElementById('modal-buttons');
 
 function hideModal() {
     modal.classList.add('hidden');
-}
-
-// --- LÓGICA DO MÍDIA QUIZ ---
-function loadMediaQuiz() {
-    // Seleciona um quiz aleatório que ainda não foi completado, ou qualquer um se todos já foram feitos
-    let availableQuizzes = mediaQuizzes.filter(q => !progress.completedQuizzes.includes(q.id));
-    if (availableQuizzes.length === 0) {
-        availableQuizzes = mediaQuizzes; // Permite refazer se todos já foram completados
-    }
-    
-    currentQuizIndex = mediaQuizzes.indexOf(availableQuizzes[Math.floor(Math.random() * availableQuizzes.length)]);
-    const quiz = mediaQuizzes[currentQuizIndex];
-    
-    // Atualizar título
-    document.getElementById('quiz-title').textContent = quiz.title;
-    
-    // Carregar vídeo do YouTube
-    const iframe = document.getElementById('youtube-player');
-    iframe.src = `https://www.youtube.com/embed/${quiz.youtubeId}`;
-    
-    // Gerar perguntas
-    const questionsContainer = document.getElementById('quiz-questions');
-    questionsContainer.innerHTML = '';
-    
-    quiz.questions.forEach((q, qIndex) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'bg-purple-900 bg-opacity-30 p-4 rounded-lg border border-purple-500 border-opacity-30';
-        
-        let questionHTML = `
-            <p class="font-semibold text-purple-200 mb-3">${qIndex + 1}. ${q.question}</p>
-            <div class="space-y-2">
-        `;
-        
-        q.options.forEach((option, oIndex) => {
-            questionHTML += `
-                <label class="flex items-center space-x-2 cursor-pointer hover:bg-purple-800 hover:bg-opacity-30 p-2 rounded transition">
-                    <input type="radio" name="question-${qIndex}" value="${oIndex}" class="form-radio text-purple-500">
-                    <span class="text-gray-200">${option}</span>
-                </label>
-            `;
-        });
-        
-        questionHTML += '</div>';
-        questionDiv.innerHTML = questionHTML;
-        questionsContainer.appendChild(questionDiv);
-    });
-    
-    // Limpar feedback
-    document.getElementById('quiz-feedback').textContent = '';
-}
-
-function checkQuizAnswers() {
-    const quiz = mediaQuizzes[currentQuizIndex];
-    const feedbackEl = document.getElementById('quiz-feedback');
-    let correctCount = 0;
-    let allAnswered = true;
-    
-    // Verificar cada pergunta
-    quiz.questions.forEach((q, qIndex) => {
-        const selectedOption = document.querySelector(`input[name="question-${qIndex}"]:checked`);
-        if (!selectedOption) {
-            allAnswered = false;
-        } else if (parseInt(selectedOption.value) === q.correct) {
-            correctCount++;
-        }
-    });
-    
-    if (!allAnswered) {
-        feedbackEl.textContent = 'Por favor, responda todas as perguntas!';
-        feedbackEl.style.color = 'orange';
-        return;
-    }
-    
-    const totalQuestions = quiz.questions.length;
-    
-    if (correctCount === totalQuestions) {
-        // Todas corretas!
-        feedbackEl.textContent = `Perfeito! Você acertou todas as ${totalQuestions} perguntas! +40 pontos! 🎉`;
-        feedbackEl.style.color = 'green';
-        
-        // Adicionar pontos apenas se não completou este quiz antes
-        if (!progress.completedQuizzes.includes(quiz.id)) {
-            progress.completedQuizzes.push(quiz.id);
-            addPoints(40);
-            updateStreak();
-            checkAchievements();
-        } else {
-            feedbackEl.textContent += ' (Quiz já completado anteriormente)';
-        }
-    } else {
-        feedbackEl.textContent = `Você acertou ${correctCount} de ${totalQuestions} perguntas. Assista o vídeo novamente e tente!`;
-        feedbackEl.style.color = 'orange';
-    }
 }
 
 // --- LÓGICA DA CULTURA ---

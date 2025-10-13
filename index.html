@@ -145,10 +145,6 @@
                     <div class="category-icon">📚</div>
                     <span>Vocabulário</span>
                 </button>
-                <button onclick="showScreen('media-quiz-screen')" class="btn-glowing flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition" style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.8) 0%, rgba(239, 68, 68, 0.8) 100%);">
-                    <div class="category-icon">🎬</div>
-                    <span>Mídia Quiz</span>
-                </button>
             </div>
             
             <!-- Botões Secundários -->
@@ -386,40 +382,6 @@
             
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="achievements-list">
                 <!-- Badges serão inseridos aqui -->
-            </div>
-        </div>
-        
-        <!-- Tela de Mídia Quiz -->
-        <div id="media-quiz-screen" class="w-full max-w-4xl hidden relative z-10">
-            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">🎬 Mídia Quiz 🎬</h2>
-            
-            <div class="card p-6 rounded-2xl shadow-2xl">
-                <!-- Título do Quiz -->
-                <h3 id="quiz-title" class="text-2xl font-bold text-purple-200 mb-4 text-center"></h3>
-                
-                <!-- Player de Vídeo do YouTube -->
-                <div class="relative pb-[56.25%] h-0 overflow-hidden rounded-xl mb-6 bg-black">
-                    <iframe id="youtube-player" 
-                            class="absolute top-0 left-0 w-full h-full" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                    </iframe>
-                </div>
-                
-                <!-- Perguntas -->
-                <div id="quiz-questions" class="space-y-4 mb-6">
-                    <!-- Perguntas serão inseridas aqui dinamicamente -->
-                </div>
-                
-                <!-- Feedback -->
-                <div id="quiz-feedback" class="h-8 mb-4 font-semibold text-center"></div>
-                
-                <!-- Botão Verificar -->
-                <button onclick="checkQuizAnswers()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition">
-                    <i class="fas fa-check-circle mr-2"></i> Verificar Respostas
-                </button>
             </div>
         </div>
         
