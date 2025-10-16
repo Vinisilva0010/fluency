@@ -14,6 +14,19 @@ const auth = firebase.auth();
 let currentUser = null; // Variável para guardar o usuário logado
 
 // --- BANCO DE DADOS ---
+const verbGameQuestions = [
+    { sentence: "___ you like pizza?", answer: "Do", hint: "Acontece agora, rotina." },
+    { sentence: "___ you call me yesterday?", answer: "Did", hint: "Refere-se a ontem." },
+    { sentence: "___ you help me tomorrow?", answer: "Will", hint: "Ainda vai acontecer." },
+    { sentence: "___ you help me if you could?", answer: "Would", hint: "Pedido educado ou sonho." },
+    { sentence: "She ___ not like coffee.", answer: "Does", hint: "Simple present para 'she'." },
+    { sentence: "They ___ finish the project last week.", answer: "Did", hint: "Ação concluída no passado." },
+    { sentence: "I think it ___ rain later.", answer: "Will", hint: "Previsão para o futuro." },
+    { sentence: "He ___ like to travel the world.", answer: "Would", hint: "Desejo ou condição hipotética." },
+    { sentence: "What ___ you do for a living?", answer: "Do", hint: "Pergunta sobre sua profissão atual." },
+    { sentence: "Where ___ you go on your last vacation?", answer: "Did", hint: "Pergunta sobre um evento passado." }
+];
+
 const phrases = {
     basic: [ 
         { en: "Hello, how are you?", pt: "Olá, como você está?" }, 
@@ -669,7 +682,7 @@ window.synth = synth;
 window.recognition = recognition;
 
 // --- LÓGICA DE NAVEGAÇÃO E TELAS ---
-const screens = ['home-screen', 'login-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen', 'culture-screen', 'conversation-screen'];
+const screens = ['home-screen', 'login-screen', 'speaking-screen', 'listening-screen', 'writing-screen', 'progress-screen', 'daily-challenge-screen', 'idioms-screen', 'vocabulary-screen', 'achievements-screen', 'culture-screen', 'conversation-screen', 'verb-game-screen'];
 
 function showScreen(screenId) {
     // Lista de telas públicas que não exigem login
@@ -1887,6 +1900,208 @@ function renderStep(topic, stepId) {
     // Atualizar progresso
     document.getElementById('conversation-progress').textContent = `Passo ${stepId}`;
 }
+
+// --- LÓGICA DO DESAFIO DOS VERBOS AUXILIARES (VERSÃO DIDÁTICA) ---
+let currentVerbQuestionIndex = 0;
+let verbGameScore = 0;
+let verbCorrectAnswers = 0;
+
+// Explicações detalhadas para cada verbo
+const verbExplanations = {
+    "Do": {
+        uso: "Usado para perguntas e negativas no PRESENTE",
+        exemplo: "Do you like pizza? (Você gosta de pizza?)",
+        dica: "Use com I, you, we, they"
+    },
+    "Does": {
+        uso: "Usado para perguntas e negativas no PRESENTE com he/she/it",
+        exemplo: "Does she speak English? (Ela fala inglês?)",
+        dica: "Use apenas com he, she, it"
+    },
+    "Did": {
+        uso: "Usado para perguntas e negativas no PASSADO",
+        exemplo: "Did you call me yesterday? (Você me ligou ontem?)",
+        dica: "Palavras como yesterday, last week indicam passado"
+    },
+    "Will": {
+        uso: "Usado para FUTURO, previsões e promessas",
+        exemplo: "It will rain tomorrow. (Vai chover amanhã)",
+        dica: "Palavras como tomorrow, later, next indicam futuro"
+    },
+    "Would": {
+        uso: "Usado para pedidos EDUCADOS e situações HIPOTÉTICAS",
+        exemplo: "Would you help me? (Você me ajudaria?)",
+        dica: "Mais formal que 'will', usado em condições com 'if'"
+    }
+};
+
+function startVerbGame() {
+    currentVerbQuestionIndex = 0;
+    verbGameScore = 0;
+    verbCorrectAnswers = 0;
+    
+    // Embaralha as perguntas
+    verbGameQuestions.sort(() => Math.random() - 0.5); 
+    showScreen('verb-game-screen');
+    
+    // Mostra as instruções primeiro
+    document.getElementById('verb-instructions').classList.remove('hidden');
+    document.getElementById('verb-game-area').classList.add('hidden');
+}
+
+function startVerbGamePlay() {
+    // Esconde instruções e mostra o jogo
+    document.getElementById('verb-instructions').classList.add('hidden');
+    document.getElementById('verb-game-area').classList.remove('hidden');
+    loadVerbQuestion();
+}
+
+function loadVerbQuestion() {
+    const question = verbGameQuestions[currentVerbQuestionIndex];
+    
+    // Atualiza a pergunta
+    document.getElementById('verb-question-sentence').textContent = question.sentence;
+    
+    // Mostra a dica
+    document.getElementById('verb-hint-text').textContent = question.hint;
+    
+    // Atualiza pontuação e progresso
+    document.getElementById('verb-game-score').textContent = verbGameScore;
+    document.getElementById('verb-game-progress').textContent = `${currentVerbQuestionIndex + 1} / ${verbGameQuestions.length}`;
+    
+    // Limpa feedback
+    document.getElementById('verb-feedback-text').textContent = '';
+    document.getElementById('verb-explanation').textContent = '';
+    document.getElementById('next-verb-question-btn').classList.add('hidden');
+
+    const optionsContainer = document.getElementById('verb-options-container');
+    optionsContainer.innerHTML = '';
+
+    // Assegura que a resposta correta esteja sempre entre as opções
+    let currentOptions = ["Do", "Did", "Will", "Would"];
+    if (!currentOptions.includes(question.answer)) {
+        currentOptions[Math.floor(Math.random() * 4)] = question.answer;
+    }
+    
+    currentOptions.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.className = 'verb-option-btn p-4 rounded-lg text-xl font-bold';
+        button.onclick = () => checkVerbAnswer(option, button);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function checkVerbAnswer(selectedAnswer, button) {
+    const question = verbGameQuestions[currentVerbQuestionIndex];
+    const feedbackTextEl = document.getElementById('verb-feedback-text');
+    const explanationEl = document.getElementById('verb-explanation');
+    const optionsButtons = document.querySelectorAll('.verb-option-btn');
+    
+    optionsButtons.forEach(btn => btn.disabled = true);
+
+    if (selectedAnswer === question.answer) {
+        // RESPOSTA CORRETA
+        feedbackTextEl.innerHTML = '<i class="fas fa-check-circle"></i> Correto! Muito bem! 🎉';
+        feedbackTextEl.style.color = '#10B981';
+        button.classList.add('correct');
+        verbGameScore += 10;
+        verbCorrectAnswers++;
+        
+        // Explicação didática do porquê está correto
+        const verbInfo = verbExplanations[question.answer] || {};
+        explanationEl.innerHTML = `
+            <strong>✅ Por que "${question.answer}" está correto?</strong><br>
+            ${verbInfo.uso}<br>
+            <em>Exemplo: ${verbInfo.exemplo}</em>
+        `;
+        explanationEl.style.color = '#a7f3d0';
+        
+        document.getElementById('verb-game-score').textContent = verbGameScore;
+        updateStreak();
+        
+    } else {
+        // RESPOSTA INCORRETA
+        feedbackTextEl.innerHTML = '<i class="fas fa-times-circle"></i> Ops! Não foi dessa vez.';
+        feedbackTextEl.style.color = '#EF4444';
+        button.classList.add('incorrect');
+        
+        // Mostra qual era a correta
+        optionsButtons.forEach(btn => {
+            if (btn.textContent === question.answer) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        // Explicação pedagógica do erro
+        const verbInfo = verbExplanations[question.answer] || {};
+        explanationEl.innerHTML = `
+            <strong>📚 A resposta correta era: "${question.answer}"</strong><br>
+            ${verbInfo.uso}<br>
+            <em>Dica: ${verbInfo.dica}</em><br>
+            <em>Exemplo: ${verbInfo.exemplo}</em>
+        `;
+        explanationEl.style.color = '#fcd34d';
+    }
+    
+    document.getElementById('next-verb-question-btn').classList.remove('hidden');
+}
+
+document.getElementById('next-verb-question-btn').onclick = () => {
+    currentVerbQuestionIndex++;
+    if (currentVerbQuestionIndex < verbGameQuestions.length) {
+        loadVerbQuestion();
+    } else {
+        // Resumo educativo final
+        const percentage = Math.round((verbCorrectAnswers / verbGameQuestions.length) * 100);
+        let performanceMsg = '';
+        let emoji = '';
+        
+        if (percentage >= 90) {
+            performanceMsg = 'Excelente! Você domina os verbos auxiliares! 🌟';
+            emoji = '🏆';
+        } else if (percentage >= 70) {
+            performanceMsg = 'Muito bom! Continue praticando! 👏';
+            emoji = '⭐';
+        } else if (percentage >= 50) {
+            performanceMsg = 'Bom começo! Revise as regras e tente novamente! 📚';
+            emoji = '💪';
+        } else {
+            performanceMsg = 'Não desista! Revise as explicações e pratique mais! 🚀';
+            emoji = '📖';
+        }
+        
+        const summaryHTML = `
+            <div class="text-center">
+                <div class="text-6xl mb-4">${emoji}</div>
+                <h3 class="text-2xl font-bold text-purple-200 mb-3">Desafio Concluído!</h3>
+                <div class="bg-purple-900/30 p-4 rounded-lg mb-4">
+                    <p class="text-3xl font-bold text-yellow-400 mb-2">${verbGameScore} pontos</p>
+                    <p class="text-lg text-gray-200">${verbCorrectAnswers} de ${verbGameQuestions.length} corretas (${percentage}%)</p>
+                </div>
+                <p class="text-lg text-purple-200 mb-4">${performanceMsg}</p>
+                <div class="bg-blue-900/20 p-3 rounded-lg border border-blue-500/30 mt-4">
+                    <p class="text-sm text-blue-200">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        <strong>Lembre-se:</strong> Do/Does (presente), Did (passado), Will (futuro), Would (educado/hipotético)
+                    </p>
+                </div>
+            </div>
+        `;
+        
+        modalMessage.innerHTML = summaryHTML;
+        modalMessage.className = 'mb-5';
+        modalButtons.innerHTML = `<button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:scale-105">Voltar ao Menu</button>`;
+        modalButtons.firstElementChild.onclick = () => {
+            hideModal();
+            showScreen('home-screen');
+        };
+        modal.classList.remove('hidden');
+        
+        addPoints(verbGameScore);
+    }
+};
+
 
 // --- INICIALIZAÇÃO ---
 window.onload = () => {

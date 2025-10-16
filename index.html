@@ -104,7 +104,14 @@
                     <i class="fas fa-trophy ml-3 text-2xl"></i>
                 </button>
             </div>
-            
+
+            <!-- Botão do Desafio dos Verbos do, did,  -->
+             <div class="mb-4 px-4">
+                    <button onclick="startVerbGame()" class="w-full verb-challenge-btn flex items-center justify-center text-lg font-semibold p-4 rounded-xl shadow-lg transition transform hover:scale-105">
+                        <i class="fas fa-bolt mr-3"></i> Desafio dos Verbos: Do, Did, Will, Would
+                    </button>
+                </div>
+
             <!-- Conversas Guiadas -->
             <div class="mb-6">
                 <h3 class="text-2xl font-bold text-white text-center mb-4 space-text">💬 Conversas Guiadas</h3>
@@ -144,6 +151,10 @@
                 <button onclick="showScreen('vocabulary-screen')" class="btn-glowing nebula-pink flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition">
                     <div class="category-icon">📚</div>
                     <span>Vocabulário</span>
+                </button>
+                <button onclick="startVerbGame()" class="btn-glowing flex flex-col items-center justify-center text-lg font-bold text-white p-6 rounded-2xl shadow-xl transition" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.8) 0%, rgba(251, 146, 60, 0.8) 100%);">
+                    <div class="category-icon">🎯</div>
+                    <span>Jogo de Verbos</span>
                 </button>
             </div>
             
@@ -395,6 +406,102 @@
             </div>
         </div>
         
+        <!-- Tela do Jogo de Verbos -->
+        <div id="verb-game-screen" class="w-full max-w-4xl hidden relative z-10">
+            <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="text-4xl font-bold text-white text-center mb-6 space-text">🎯 Jogo de Verbos Auxiliares 🎯</h2>
+            
+            <!-- Área de Instruções -->
+            <div id="verb-instructions" class="card p-8 rounded-2xl shadow-2xl mb-6">
+                <h3 class="text-2xl font-bold text-purple-200 mb-4 text-center">📚 Aprenda sobre os Verbos Auxiliares</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- DO -->
+                    <div class="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-4 rounded-lg border border-blue-500/30">
+                        <h4 class="font-bold text-blue-300 mb-2 text-lg">📘 DO / DOES</h4>
+                        <p class="text-sm text-gray-200 mb-2"><strong>Quando usar:</strong> Perguntas e negativas no presente</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: <strong>Do</strong> you like pizza?</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: She <strong>does</strong> not (doesn't) eat meat.</p>
+                    </div>
+                    
+                    <!-- DID -->
+                    <div class="bg-gradient-to-r from-purple-900/30 to-purple-800/30 p-4 rounded-lg border border-purple-500/30">
+                        <h4 class="font-bold text-purple-300 mb-2 text-lg">📗 DID</h4>
+                        <p class="text-sm text-gray-200 mb-2"><strong>Quando usar:</strong> Perguntas e negativas no passado</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: <strong>Did</strong> you call me yesterday?</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: I <strong>did</strong> not (didn't) go there.</p>
+                    </div>
+                    
+                    <!-- WILL -->
+                    <div class="bg-gradient-to-r from-green-900/30 to-green-800/30 p-4 rounded-lg border border-green-500/30">
+                        <h4 class="font-bold text-green-300 mb-2 text-lg">📙 WILL</h4>
+                        <p class="text-sm text-gray-200 mb-2"><strong>Quando usar:</strong> Futuro, previsões e promessas</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: It <strong>will</strong> rain tomorrow.</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: I <strong>will</strong> help you.</p>
+                    </div>
+                    
+                    <!-- WOULD -->
+                    <div class="bg-gradient-to-r from-orange-900/30 to-orange-800/30 p-4 rounded-lg border border-orange-500/30">
+                        <h4 class="font-bold text-orange-300 mb-2 text-lg">📕 WOULD</h4>
+                        <p class="text-sm text-gray-200 mb-2"><strong>Quando usar:</strong> Pedidos educados e situações hipotéticas</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: <strong>Would</strong> you like some coffee?</p>
+                        <p class="text-xs text-gray-300 italic">Exemplo: I <strong>would</strong> travel if I could.</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button onclick="startVerbGamePlay()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:scale-105">
+                        <i class="fas fa-play mr-2"></i> Começar o Jogo!
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Área do Jogo -->
+            <div id="verb-game-area" class="card p-8 rounded-2xl shadow-2xl hidden">
+                <!-- Header com Pontuação e Progresso -->
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-purple-500/30">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-400">Pontuação</p>
+                        <p id="verb-game-score" class="text-3xl font-bold text-yellow-400">0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-400">Progresso</p>
+                        <p id="verb-game-progress" class="text-xl font-bold text-purple-300">0 / 10</p>
+                    </div>
+                </div>
+                
+                <!-- Pergunta -->
+                <div class="mb-6 text-center">
+                    <p class="text-sm text-gray-400 mb-2">Complete a frase:</p>
+                    <p id="verb-question-sentence" class="text-3xl font-bold text-white mb-3">
+                        <!-- A frase aparecerá aqui -->
+                    </p>
+                    <div id="verb-hint" class="bg-purple-900/20 p-3 rounded-lg border border-purple-500/30 mb-4">
+                        <p class="text-sm text-purple-200">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            <strong>Dica:</strong> <span id="verb-hint-text"></span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Opções de Resposta -->
+                <div id="verb-options-container" class="grid grid-cols-2 gap-4 mb-6">
+                    <!-- As opções serão inseridas aqui pelo JavaScript -->
+                </div>
+                
+                <!-- Feedback Detalhado -->
+                <div id="verb-feedback" class="bg-gray-900/30 p-4 rounded-lg border border-gray-700/30 mb-4 min-h-[80px]">
+                    <p id="verb-feedback-text" class="text-center text-lg font-bold mb-2"></p>
+                    <p id="verb-explanation" class="text-sm text-gray-300 text-center"></p>
+                </div>
+                
+                <!-- Botão Próxima Pergunta -->
+                <button id="next-verb-question-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105">
+                    <i class="fas fa-arrow-right mr-2"></i> Próxima Pergunta
+                </button>
+            </div>
+        </div>
+        
         <!-- Tela de Conversas Guiadas -->
         <div id="conversation-screen" class="w-full max-w-3xl hidden relative z-10">
             <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl hover:scale-110 transition"><i class="fas fa-arrow-left"></i></button>
@@ -464,6 +571,40 @@
                 </p>
             </div>
         </div>
+
+        <!-- Tela do Desafio dos Verbos -->
+<div id="verb-game-screen" class="w-full max-w-2xl hidden">
+    <button onclick="showScreen('home-screen')" class="absolute top-4 left-4 text-white text-2xl z-20"><i class="fas fa-arrow-left"></i></button>
+    <div class="card p-6 rounded-2xl shadow-2xl text-center relative">
+        <h2 class="text-3xl font-bold text-purple-200 mb-2">Desafio dos Verbos</h2>
+        <p class="text-gray-300 mb-6">Escolha o verbo correto para completar a frase.</p>
+
+        <!-- Placar e Progresso -->
+        <div class="flex justify-between items-center mb-6 text-lg font-semibold text-gray-200">
+            <div>Pontos: <span id="verb-game-score" class="text-yellow-300">0</span></div>
+            <div>Questão: <span id="verb-game-progress">1 / 10</span></div>
+        </div>
+
+        <!-- Área da Pergunta -->
+        <div class="bg-gray-900 bg-opacity-50 p-6 rounded-xl min-h-[100px] flex items-center justify-center mb-6">
+            <p id="verb-question-sentence" class="text-2xl md:text-3xl font-semibold text-white"></p>
+        </div>
+
+        <!-- Botões de Opção -->
+        <div id="verb-options-container" class="grid grid-cols-2 gap-4 mb-4">
+            <!-- Botões serão gerados pelo JS -->
+        </div>
+
+        <!-- Feedback -->
+        <div id="verb-feedback" class="h-8 mb-4 text-xl font-bold"></div>
+
+        <!-- Botão de Próxima -->
+        <button id="next-verb-question-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition">
+            Próxima Pergunta <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+    </div>
+</div>
+ 
         
         <!-- Modal Customizado -->
         <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50 p-4">
